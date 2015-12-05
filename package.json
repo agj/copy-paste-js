@@ -1,0 +1,35 @@
+{
+  "name": "copy-paste-js",
+  "version": "0.1.0",
+  "description": "copy-paste-js =============",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/agj/copy-paste-js.git"
+  },
+  "author": "agj",
+  "license": "Unlicense",
+  "bugs": {
+    "url": "https://github.com/agj/copy-paste-js/issues"
+  },
+  "homepage": "https://github.com/agj/copy-paste-js#readme",
+  "private": true,
+  "devDependencies": {
+    "acorn": "^2.6.4",
+    "babel-preset-es2015": "^6.3.13",
+    "dot-into": "^0.1.1",
+    "escodegen": "^1.7.1",
+    "fs-promise": "^0.3.1",
+    "function-promisifier": "^1.0.0",
+    "glob-promise": "^1.0.4",
+    "longjohn": "^0.2.11",
+    "ramda": "^0.18.0"
+  },
+  "dependencies": {}
+}

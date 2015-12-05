@@ -18,8 +18,8 @@ const get = prop => obj => obj[prop];
 
 ```js
 const uniq = list => {
-	const seen = [];
-	return list.filter(item => seen.some(eq(item)) ? false : (seen.push(item), true));
+    const seen = [];
+    return list.filter(item => seen.some(eq(item)) ? false : (seen.push(item), true));
 };
 
 const some = p => list => list.some(p);
@@ -46,18 +46,18 @@ const test = regex => text => regex.test(text);
 ```js
 const call = f => (...args) => f(...args);
 
-const apply = f => (args) => f(...args);
+const apply = f => args => f(...args);
 
 const callMethod = (method, ...args) => obj => obj[method](...args);
 
 const pipe = (...fs) => fs.reduce((left, right) => (...args) => right(left(...args)));
 
 const alternate = (f, g) => {
-	let state = false;
-	return (...args) => {
-		state = !state;
-		return state ? f(...args) : g(...args);
-	};
+    let state = false;
+    return (...args) => {
+        state = !state;
+        return state ? f(...args) : g(...args);
+    };
 };
 ```
 
@@ -89,11 +89,11 @@ const sel = document.querySelector.bind(document);
 const selAll = document.querySelectorAll.bind(document);
 
 const makeEl = (tag, attrs, ...children) => {
-	const el = document.createElement(tag);
-	if (attrs) Object.keys(attrs).forEach(attr => el.setAttribute(attr, attrs[attr]));
-	children.map(obj => typeof obj === 'string' ? document.createTextNode(obj) : obj)
-		.forEach(node => el.appendChild(node));
-	return el;
+    const el = document.createElement(tag);
+    if (attrs)
+        Object.keys(attrs).forEach(attr => el.setAttribute(attr, attrs[attr]));
+    children.map(obj => typeof obj === 'string' ? document.createTextNode(obj) : obj).forEach(node => el.appendChild(node));
+    return el;
 };
 ```
 
