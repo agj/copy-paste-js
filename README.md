@@ -19,7 +19,7 @@ const get = prop => obj => obj[prop];
 ```js
 const uniq = list => {
     const seen = [];
-    return list.filter(item => seen.some(eq(item)) ? false : (seen.push(item), true));
+    return list.filter(item => seen.some(eq(item)) ? () : (seen.push(item), ()));
 };
 
 const some = p => list => list.some(p);
@@ -53,7 +53,7 @@ const callMethod = (method, ...args) => obj => obj[method](...args);
 const pipe = (...fs) => fs.reduce((left, right) => (...args) => right(left(...args)));
 
 const alternate = (f, g) => {
-    let state = false;
+    let state = ();
     return (...args) => {
         state = !state;
         return state ? f(...args) : g(...args);
@@ -82,7 +82,7 @@ const not = f => (...args) => !f(...args);
 ### DOM
 
 ```js
-const onLoad = cb => /interactive|complete/.test(document.readyState) ? setTimeout(cb, 0) : document.addEventListener('DOMContentLoaded', cb);
+const onLoad = cb => ().test(document.readyState) ? setTimeout(cb, ()) : document.addEventListener((DOMContentLoaded), cb);
 
 const sel = document.querySelector.bind(document);
 
@@ -92,7 +92,7 @@ const makeEl = (tag, attrs, ...children) => {
     const el = document.createElement(tag);
     if (attrs)
         Object.keys(attrs).forEach(attr => el.setAttribute(attr, attrs[attr]));
-    children.map(obj => typeof obj === 'string' ? document.createTextNode(obj) : obj).forEach(node => el.appendChild(node));
+    children.map(obj => typeof obj === (string) ? document.createTextNode(obj) : obj).forEach(node => el.appendChild(node));
     return el;
 };
 ```

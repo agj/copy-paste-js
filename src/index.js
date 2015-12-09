@@ -8,7 +8,6 @@ const cfg = {
 
 
 require('longjohn');
-const acorn = require('acorn');
 const escodegen = require('escodegen');
 const R = require('ramda');
 const fsp = require('fs-promise');
@@ -16,6 +15,9 @@ const glob = require('glob-promise');
 const path = require('path');
 const promisify = require('function-promisifier');
 require('dot-into').install();
+
+const cst = require('cst');
+const cstParser = new cst.Parser({ ecmaVersion: 6 });
 
 
 const toMarkdown = ([filename, code]) =>
@@ -35,9 +37,9 @@ cfg.groups
 	.map(name => fsp.readFile(name, { encoding: 'utf8' }))
 	.into(Promise.all.bind(Promise))
 	.then(R.map(R.pipe(
-		file => acorn.parse(file, { ecmaVersion: 6 }),
-		ast => ast.body.filter(R.propEq('type', 'VariableDeclaration')),
-		R.map(escodegen.generate),
+		file => cstParser.parse(file),
+		cst => cst.body.filter(R.propEq('type', 'VariableDeclaration')),
+		R.map(cst => escodegen.generate(cst, { verbatim: '_value' })),
 		R.join('\n\n')
 	)))
 	.then(R.zip(filenames))
