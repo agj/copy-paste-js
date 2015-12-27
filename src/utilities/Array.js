@@ -9,3 +9,5 @@ const some = p => list => list.some(p);
 const any = p => list => list.any(p);
 
 const isIn = list => obj => list.some(a => a === obj);
+
+const toArray = Function.prototype.call.bind([].slice);
