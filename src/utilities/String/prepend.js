@@ -1,0 +1,1 @@
+const prepend = a => b => a + b;

@@ -1,0 +1,1 @@
+const some = p => list => list.some(p);

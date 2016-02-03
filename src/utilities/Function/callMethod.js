@@ -1,0 +1,1 @@
+const callMethod = (method, ...args) => obj => obj[method](...args);

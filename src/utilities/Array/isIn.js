@@ -1,0 +1,1 @@
+const isIn = list => obj => list.some(a => a === obj);
