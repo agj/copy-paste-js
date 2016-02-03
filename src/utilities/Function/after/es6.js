@@ -1,0 +1,1 @@
+const after = (secs, fn) => setTimeout(fn, secs * 1000);
