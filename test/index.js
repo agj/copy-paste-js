@@ -1,5 +1,14 @@
 'use strict';
 
+// Config.
+
+var cfg = {
+	utilitiesFolder: 'src/utilities/',
+};
+
+
+// Requires.
+
 var fs = require('fs');
 var R = require('ramda');
 var test = require('tape-catch');
@@ -8,30 +17,29 @@ var acorn = require('acorn');
 var escodegen = require('escodegen');
 
 
-var cfg = {
-	utilitiesFolder: 'src/utilities/',
-	testFolder: 'test/',
+// Utils.
+
+var isDirectory = function (parent) {
+	return function (dir) {
+		return fs.statSync(parent + dir).isDirectory();
+	};
 };
 
+var utilityFilename = function (group, name, esVersion) {
+	return group + '/' + name + '/es' + esVersion + '.js';
+};
+var testFilename = function (group, name) {
+	return group + '/' + name + '/test.js';
+};
+var utilityHasVersion = function (group, name, esVersion) {
+	return fs.existsSync(cfg.utilitiesFolder + utilityFilename(group, name, esVersion));
+};
 
-var testFiles = R.unnest(
-	fs.readdirSync(cfg.testFolder)
-	.filter( function (dir) {
-		return fs.statSync(cfg.testFolder + dir).isDirectory();
-	})
-	.map( function (dir) {
-		return fs.readdirSync(cfg.testFolder + dir)
-			.filter(R.test(/\.js$/))
-			.map(R.pair(dir));
-	})
-);
-
-var loadTest = function(dir, file) {
-	var dirfile = dir + '/' + file;
-	var code = fs.readFileSync(cfg.utilitiesFolder + dirfile, 'utf8');
-	// console.log(code);
+var loadJS = function (group, name, esVersion) {
+	var dirfile = cfg.utilitiesFolder + utilityFilename(group, name, esVersion);
+	var code = fs.readFileSync(dirfile, 'utf8');
 	var ast =
-		acorn.parse(code, { ecmaVersion: 6 })
+		acorn.parse(code, { ecmaVersion: esVersion })
 		.body
 		.filter(R.propEq('type', 'VariableDeclaration'))
 		[0]
@@ -39,11 +47,39 @@ var loadTest = function(dir, file) {
 		[0]
 		.init;
 	code = escodegen.generate(ast);
-	// console.log(code);
-	return require('./' + dirfile)(eval(code));
+	return eval(babel.transform(code, { presets: 'es2015' }));
 };
 
-testFiles.forEach(R.apply(function (dir, file) {
-	loadTest(dir, file)
-	test(dir + '/' + file, loadTest(dir, file));
+var loadTest = function(group, name) {
+	return require('../' + cfg.utilitiesFolder + testFilename(group, name));
+};
+
+var executeTestMaybe = function (group, name, esVersion) {
+	if (utilityHasVersion(group, name, esVersion)) {
+		test(
+			group + '/' + name + ' (es' + esVersion + ')',
+			loadTest(group, name)(loadJS(group, name, esVersion))
+		);
+	}
+};
+
+
+// Init.
+
+var utilities = R.unnest(
+	fs.readdirSync(cfg.utilitiesFolder)
+	.filter(isDirectory(cfg.utilitiesFolder))
+	.map( function (dir) {
+		return fs.readdirSync(cfg.utilitiesFolder + dir)
+			.filter(isDirectory(cfg.utilitiesFolder + dir + '/'))
+			.map(R.pair(dir));
+	})
+);
+
+// console.log(utilities);
+
+utilities.forEach(R.apply(function (group, name) {
+	executeTestMaybe(group, name, 6);
+	executeTestMaybe(group, name, 5);
 }));
+
