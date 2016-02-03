@@ -1,7 +1,10 @@
 'use strict';
 
-module.exports = function (EMPTY_TEST) {
+module.exports = function (isIn) {
 	return function (assert) {
-		assert.equal(true, false);
+		assert.plan(2);
+
+		assert.ok(   isIn(['a', 'b', 'c'])('b'));
+		assert.notOk(isIn(['a', 'b', 'c'])('d'));
 	};
 };

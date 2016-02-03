@@ -1,7 +1,11 @@
 'use strict';
 
-module.exports = function (EMPTY_TEST) {
+module.exports = function (toArray) {
 	return function (assert) {
-		assert.equal(true, false);
+		assert.plan(1);
+
+		var args = function () { return arguments };
+
+		assert.deepEqual(toArray(args('a', 'b', 'c')), ['a', 'b', 'c']);
 	};
 };

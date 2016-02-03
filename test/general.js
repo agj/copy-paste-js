@@ -1,23 +1,16 @@
 'use strict';
 
-// Config.
+var fs = require('fs');
+var R = require('ramda');
+var babel = require('babel-core');
+var acorn = require('acorn');
+var escodegen = require('escodegen');
+var test = require('tape-catch');
+
 
 var cfg = {
 	utilitiesFolder: 'src/utilities/',
 };
-
-
-// Requires.
-
-var fs = require('fs');
-var R = require('ramda');
-var test = require('tape-catch');
-var babel = require('babel-core');
-var acorn = require('acorn');
-var escodegen = require('escodegen');
-
-
-// Utils.
 
 var isDirectory = function (parent) {
 	return function (dir) {
@@ -47,15 +40,18 @@ var loadJS = function (group, name, esVersion) {
 		[0]
 		.init;
 	code = escodegen.generate(ast);
-	return eval(babel.transform(code, { presets: 'es2015' }));
+	if (esVersion === 6) code = babel.transform(code, { presets: 'es2015' }).code;
+	return eval(code);
 };
 
-var loadTest = function(group, name) {
+var loadTest = function (group, name) {
 	return require('../' + cfg.utilitiesFolder + testFilename(group, name));
 };
 
 var executeTestMaybe = function (group, name, esVersion) {
 	if (utilityHasVersion(group, name, esVersion)) {
+		// console.log('loading js', group, name, esVersion);
+		// console.log(loadJS(group, name, esVersion));
 		test(
 			group + '/' + name + ' (es' + esVersion + ')',
 			loadTest(group, name)(loadJS(group, name, esVersion))
@@ -64,22 +60,13 @@ var executeTestMaybe = function (group, name, esVersion) {
 };
 
 
-// Init.
-
-var utilities = R.unnest(
-	fs.readdirSync(cfg.utilitiesFolder)
-	.filter(isDirectory(cfg.utilitiesFolder))
-	.map( function (dir) {
-		return fs.readdirSync(cfg.utilitiesFolder + dir)
-			.filter(isDirectory(cfg.utilitiesFolder + dir + '/'))
-			.map(R.pair(dir));
-	})
-);
-
-// console.log(utilities);
-
-utilities.forEach(R.apply(function (group, name) {
-	executeTestMaybe(group, name, 6);
-	executeTestMaybe(group, name, 5);
-}));
-
+module.exports = {
+	cfg: cfg,
+	isDirectory: isDirectory,
+	utilityFilename: utilityFilename,
+	testFilename: testFilename,
+	utilityHasVersion: utilityHasVersion,
+	loadJS: loadJS,
+	loadTest: loadTest,
+	executeTestMaybe: executeTestMaybe,
+};

@@ -1,1 +1,0 @@
-const any = p => list => list.any(p);
