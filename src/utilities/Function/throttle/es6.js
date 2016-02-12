@@ -5,7 +5,7 @@ const throttle = (secs, fn) => {
 		const now = Date.now();
 		if (now > last + interval) {
 			last = now;
-			fn.apply(this, args);
+			fn(...args);
 		}
 	};
 };
