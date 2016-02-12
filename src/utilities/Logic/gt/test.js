@@ -1,7 +1,11 @@
 'use strict';
 
-module.exports = function (EMPTY_TEST) {
+module.exports = function (gt) {
 	return function (assert) {
-		assert.equal(true, false);
+		assert.plan(3);
+
+		assert.equal(gt(0)(1), true);
+		assert.equal(gt(0)(0), false);
+		assert.equal(gt(1)(0), false);
 	};
 };
