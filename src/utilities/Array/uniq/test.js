@@ -1,7 +1,9 @@
 'use strict';
 
-module.exports = function (EMPTY_TEST) {
+module.exports = function (uniq) {
 	return function (assert) {
-		assert.equal(true, false);
+		assert.plan(2);
+		assert.deepEqual(uniq(['a', 'b', 'c']), ['a', 'b', 'c']);
+		assert.deepEqual(uniq(['a', 'b', 'a']), ['a', 'b']);
 	};
 };

@@ -5,7 +5,7 @@ module.exports = function (every) {
 		assert.plan(2);
 		var is10 = function (a) { return a === 10 };
 
-		assert.ok( every(is10)([10, 10, 10]) );
-		assert.notOk( every(is10)([0, 1, 10, 10, 6]) );
+		assert.true( every(is10)([10, 10, 10]));
+		assert.false(every(is10)([0, 1, 10, 10, 6]));
 	};
 };

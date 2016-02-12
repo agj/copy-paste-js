@@ -67,6 +67,7 @@ var executeTestBrowserMaybe = function (group, name, esVersion) {
 			'<html><head></head><body>' +
 				'<div id="container">' +
 					'<span class="contained">some text</span>' +
+					'<span>other text</span>' +
 				'</div>' +
 			'</body></html>'
 		);

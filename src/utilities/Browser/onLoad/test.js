@@ -1,7 +1,15 @@
 'use strict';
 
-module.exports = function (EMPTY_TEST) {
+module.exports = function (onLoad, window) {
 	return function (assert) {
-		assert.equal(true, false);
+		assert.plan(3);
+
+		var first = true;
+		onLoad(function () {
+			assert.false(first);
+			assert.equal(window.document.readyState, 'complete');
+		});
+		assert.true(first);
+		first = false;
 	};
 };
