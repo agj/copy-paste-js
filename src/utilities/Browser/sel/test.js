@@ -1,7 +1,14 @@
 'use strict';
 
-module.exports = function (EMPTY_TEST) {
+var onLoad = require('../../../../test/general').onLoad;
+
+module.exports = function (sel, window) {
 	return function (assert) {
-		assert.equal(true, false);
+		assert.plan(2);
+		onLoad(window.document, function () {
+			var selected = sel('#container .contained');
+			assert.equal(selected.tagName, 'SPAN');
+			assert.equal(selected.textContent, 'some text');
+		});
 	};
 };
