@@ -14,7 +14,7 @@ const fsp = require('fs-promise');
 const glob = require('glob-promise');
 const path = require('path');
 const promisify = require('function-promisifier');
-require('dot-into').install();
+// require('dot-into').install(); // Only for debugging tests!
 
 const cst = require('cst');
 const cstParser = new cst.Parser({ ecmaVersion: 6 });
