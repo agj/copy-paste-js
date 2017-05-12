@@ -1,7 +1,10 @@
 'use strict';
 
-module.exports = function (EMPTY_TEST) {
+module.exports = function (test) {
 	return function (assert) {
-		assert.equal(true, false);
+		assert.plan(2);
+
+		assert.equal(test(/included/)('text includedtext'), true);
+		assert.equal(test(/notincluded/)('text includedtext'), false);
 	};
 };

@@ -1,7 +1,9 @@
 'use strict';
 
-module.exports = function (EMPTY_TEST) {
+module.exports = function (prepend) {
 	return function (assert) {
-		assert.equal(true, false);
+		assert.plan(1);
+
+		assert.equal(prepend('before')('after'), 'beforeafter');
 	};
 };
