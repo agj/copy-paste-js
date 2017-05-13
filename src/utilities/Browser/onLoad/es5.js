@@ -1,0 +1,1 @@
+var onLoad = function (cb) { return /interactive|complete/.test(document.readyState) ? setTimeout(cb, 0) : document.addEventListener('DOMContentLoaded', cb) };

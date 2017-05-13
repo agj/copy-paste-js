@@ -128,10 +128,10 @@ const counter = () => { let i = 0; return () => i++ };
 const debounce = (secs, fn) => {
 	const delay = secs * 1000;
 	let timeoutID;
-	const exec = (t, args) => fn.apply(t, args);
+	const exec = (args) => fn.apply(null, args);
 	return (...args) => {
 		clearTimeout(timeoutID);
-		timeoutID = setTimeout(exec, delay, this, args);
+		timeoutID = setTimeout(exec, delay, args);
 	};
 };
 ```
@@ -146,6 +146,12 @@ const log = (...msg) => () => console.log.apply(console, msg);
 
 ```js
 const partial = (f, args1) => (...args2) => f.apply(null, args1.concat(args2));
+```
+
+#### partialR
+
+```js
+const partialR = (f, args1) => (...args2) => f.apply(null, args2.concat(args1));
 ```
 
 #### pipe

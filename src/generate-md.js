@@ -8,7 +8,7 @@ const cfg = {
 
 
 const R = require('ramda');
-const fs = require('fs-promise');
+const fs = require('mz/fs');
 const glob = require('glob-promise');
 const path = require('path');
 const promisify = require('function-promisifier');
@@ -93,8 +93,13 @@ const makeFile = (filename, esVersion) =>
 
 
 
-makeFile('README.md', 6)
-.then(R.partial(makeFile, ['es5.md', 5]));
+// Finally, process.
+
+[
+	['README.md', 6],
+	['es5.md', 5],
+]
+.forEach(R.apply(makeFile));
 
 
 
