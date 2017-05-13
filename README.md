@@ -9,92 +9,232 @@ A collection of javascript (ES2015 standard) utilities designed for copy+pasting
 
 ### Object
 
+#### get
+
 ```js
 const get = prop => obj => obj[prop];
 ```
 
+#### merge
+
+```js
+const merge = o1 => o2 => {
+	var r = {};
+	Object.keys(o1).forEach(prop => r[prop] = o1[prop]);
+	Object.keys(o2).forEach(prop => r[prop] = o2[prop]);
+	return r;
+};
+```
 
 ### Array
 
+#### every
+
 ```js
-const uniq = list => {
-    const seen = [];
-    return list.filter(item => seen.some(eq(item)) ? () : (seen.push(item), ()));
-};
+const every = p => list => list.every(p);
+```
 
-const some = p => list => list.some(p);
+#### isIn
 
-const any = p => list => list.any(p);
-
+```js
 const isIn = list => obj => list.some(a => a === obj);
 ```
 
+#### some
+
+```js
+const some = p => list => list.some(p);
+```
+
+#### uniq
+
+```js
+const uniq = list => {
+	const seen = [];
+	return list.filter(item => seen.some(a => a === item) ? false : (seen.push(item), true));
+};
+```
 
 ### String
 
+#### append
+
+```js
+const append = a => b => b + a;
+```
+
+#### prepend
+
 ```js
 const prepend = a => b => a + b;
+```
 
-const append = a => b => b + a;
+#### test
 
+```js
 const test = regex => text => regex.test(text);
 ```
 
-
 ### Function
+
+#### after
+
+```js
+const after = (secs, fn) => setTimeout(fn, secs * 1000);
+```
+
+#### alternate
+
+```js
+const alternate = (f, g) => {
+	let state = false;
+	return (...args) => {
+		state = !state;
+		return state ? f(...args) : g(...args);
+	};
+};
+```
+
+#### apply
+
+```js
+const apply = f => (args) => f(...args);
+```
+
+#### call
 
 ```js
 const call = f => (...args) => f(...args);
+```
 
-const apply = f => args => f(...args);
+#### callMethod
 
+```js
 const callMethod = (method, ...args) => obj => obj[method](...args);
+```
 
-const pipe = (...fs) => fs.reduce((left, right) => (...args) => right(left(...args)));
+#### counter
 
-const alternate = (f, g) => {
-    let state = ();
-    return (...args) => {
-        state = !state;
-        return state ? f(...args) : g(...args);
-    };
+```js
+const counter = () => { let i = 0; return () => i++ };
+```
+
+#### debounce
+
+```js
+const debounce = (secs, fn) => {
+	const delay = secs * 1000;
+	let timeoutID;
+	const exec = (t, args) => fn.apply(t, args);
+	return (...args) => {
+		clearTimeout(timeoutID);
+		timeoutID = setTimeout(exec, delay, this, args);
+	};
 };
 ```
 
+#### log
+
+```js
+const log = (...msg) => () => console.log.apply(console, msg);
+```
+
+#### partial
+
+```js
+const partial = (f, args1) => (...args2) => f.apply(null, args1.concat(args2));
+```
+
+#### pipe
+
+```js
+const pipe = (...fs) => fs.reduce((left, right) => (...args) => right(left(...args)));
+```
+
+#### throttle
+
+```js
+const throttle = (secs, fn) => {
+	const interval = secs * 1000;
+	let last = 0;
+	return (...args) => {
+		const now = Date.now();
+		if (now > last + interval) {
+			last = now;
+			fn(...args);
+		}
+	};
+};
+```
 
 ### Logic
 
+#### eq
+
 ```js
 const eq = a => b => b === a;
+```
 
-const lt = a => b => b < a;
+#### gt
 
-const lte = a => b => b <= a;
-
+```js
 const gt = a => b => b > a;
+```
 
+#### gte
+
+```js
 const gte = a => b => b >= a;
+```
 
+#### lt
+
+```js
+const lt = a => b => b < a;
+```
+
+#### lte
+
+```js
+const lte = a => b => b <= a;
+```
+
+#### not
+
+```js
 const not = f => (...args) => !f(...args);
 ```
 
+### Browser
 
-### DOM
+#### makeEl
 
 ```js
-const onLoad = cb => ().test(document.readyState) ? setTimeout(cb, ()) : document.addEventListener((DOMContentLoaded), cb);
-
-const sel = document.querySelector.bind(document);
-
-const selAll = document.querySelectorAll.bind(document);
-
 const makeEl = (tag, attrs, ...children) => {
-    const el = document.createElement(tag);
-    if (attrs)
-        Object.keys(attrs).forEach(attr => el.setAttribute(attr, attrs[attr]));
-    children.map(obj => typeof obj === (string) ? document.createTextNode(obj) : obj).forEach(node => el.appendChild(node));
-    return el;
+	const el = document.createElement(tag);
+	if (attrs) Object.keys(attrs).forEach(attr => el.setAttribute(attr, attrs[attr]));
+	children.map(obj => typeof obj === 'string' ? document.createTextNode(obj) : obj)
+		.forEach(node => el.appendChild(node));
+	return el;
 };
+```
+
+#### onLoad
+
+```js
+const onLoad = cb => /interactive|complete/.test(document.readyState) ? setTimeout(cb, 0) : document.addEventListener('DOMContentLoaded', cb);
+```
+
+#### sel
+
+```js
+const sel = document.querySelector.bind(document);
+```
+
+#### selAll
+
+```js
+const selAll = document.querySelectorAll.bind(document);
 ```
 
 

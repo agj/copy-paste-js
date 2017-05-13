@@ -7,8 +7,6 @@ const cfg = {
 };
 
 
-const escodegen = require('escodegen');
-const acorn = require('acorn');
 const R = require('ramda');
 const fs = require('fs-promise');
 const glob = require('glob-promise');
@@ -26,9 +24,6 @@ process.on(
     }
 );
 
-const cst = require('cst');
-const cstParser = new cst.Parser({ ecmaVersion: 6 });
-
 // Utilities
 
 const whenAll = Promise.all.bind(Promise);
@@ -40,77 +35,56 @@ const whenAllObj = obj =>
 	}), Promise.resolve({})));
 const whenAllDeep = obj =>
 	obj.into(R.map(obj => {
-		console.log('then in obj', 'then' in obj, obj);
 		if ('then' in obj) return obj;
-		else return whenAllDeep(obj);
+		return whenAllDeep(obj);
 	}))
-	.into(whenAllObj);
+	.into(Array.isArray(obj) ? whenAll : whenAllObj);
 const log = R.tap(msg => console.log(msg));
+const br = n => '\n'.repeat(n);
 
 
-const toMarkdown = ([filename, code]) =>
-`### ${ path.basename(filename, '.js') }
-
-\`\`\`js
-${code}
-\`\`\``;
+const groupToMarkdown = (utils, groupName) =>
+	`### ${ groupName }` + br(2) +
+	R.mapObjIndexed(utilToMarkdown, utils)
+	.into(R.values)
+	.join(br(2));
+const utilToMarkdown = (code, utilName) =>
+	`#### ${ utilName }` + br(2) +
+	'```js' + br(1) +
+	code + br(1) +
+	'```';
 const insertUtilities = R.curry(promisify((context, insertion) => context.replace('<!-- UTILITIES HERE -->', insertion)));
 const utf8 = { encoding: 'utf8' };
 const utilitiesInGroup = group =>
 	glob(cfg.utilities + group + '/*/')
 	.then(R.map(R.replace(/.+\/([^\/]+)\/?$/, '$1')));
-const jsFilesForUtil = (group, util) => glob(`${cfg.utilities}${group}/${util}/es*.js`);
+const jsFileForUtil = (esVersion, group, util) =>
+	glob(`${cfg.utilities}${group}/${util}/es${esVersion}.js`)
+	.then(files => files.length > 0 ? files[0] : null);
 const readFile = filename => fs.readFile(filename, utf8);
-const getDefinition = code =>
-	acorn.parse(code, { ecmaVersion: 6 })
-	.body
-	.filter(R.propEq('type', 'VariableDeclaration'))
-	[0];
-const parseCST = escodegen.generate;
-const compareInputOutput = R.curry((original, processed) => { if (original !== processed) console.error("Original and processed don\'t match!", original, processed) });
+const writeFile = R.curry((filename, data) => fs.writeFile(filename, data, 'utf8'));
 
 
 cfg.groups
 .map(group => [group, utilitiesInGroup(group)])
 .into(R.fromPairs)
 .into(whenAllObj)
-.then(R.tap(console.log))
 .then(R.mapObjIndexed((utils, group) =>
-	utils.map(util => [util, jsFilesForUtil(group, util)])
+	utils.map(util => [
+		util,
+		jsFileForUtil(6, group, util)
+			.then(R.unless(R.isNil, readFile))
+	])
 	.into(R.fromPairs)
 	.into(whenAllObj)
-	.then(R.map(R.map(
-		R.pipe(readFile, promisify(getDefinition), promisify(parseCST))
-	)))
+	.then(R.reject(R.isNil))
 ))
 .then(whenAllDeep)
-.then(whenAllDeep)
-.then(R.tap(() => console.log('done')))
-.then(result => {
-	console.log(result['Browser']['makeEl'][0]);
-})
-
-// .into(filenames =>
-// 	filenames
-// 	.map(name => fs.readFile(name, utf8))
-// 	.into(whenAll)
-// 	.then(R.map(file => R.pipe(
-// 		file => cstParser.parse(file),
-// 		cst => cst.body.filter(R.propEq('type', 'VariableDeclaration')),
-// 		R.map(cst => escodegen.generate(cst, { verbatim: '_value' })),
-// 		(processed) => {
-// 			if (file !== processed) throw "Original and processed don\'t match!\n\n" + file + "\n\n" + processed;
-// 			return processed;
-// 		},
-// 		R.join('\n\n')
-// 	)(file)
-// 	))
-// 	.then(R.zip(filenames))
-// 	.then(R.map(toMarkdown))
-// 	.then(R.join('\n\n\n'))
-// )
-// .then(insertUtilities(fs.readFile(cfg.template + 'README.md', utf8)))
-// .then(data => fs.writeFile('README.md', data, utf8))
+.then(R.mapObjIndexed(groupToMarkdown))
+.then(R.values)
+.then(R.join(br(2)))
+.then(insertUtilities(readFile(cfg.template + 'README.md')))
+.then(writeFile('README.md'))
 .catch(err => console.log(err.stack));
 
 
