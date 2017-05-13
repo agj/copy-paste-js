@@ -17,10 +17,8 @@ require('dot-into').install();
 process.on(
     "unhandledRejection",
     function handleWarning( reason, promise ) {
-        console.log("[PROCESS] Unhandled Promise Rejection");
-        console.log("- - - - - - - - - - - - - - - - - - -");
-        console.log( reason );
-        console.log("- - - - - - - - - - - - - - - - - - -");
+        console.log("UNHANDLED PROMISE REJECTION:");
+        console.log(reason);
     }
 );
 
@@ -43,6 +41,9 @@ const log = R.tap(msg => console.log(msg));
 const br = n => '\n'.repeat(n);
 
 
+const preprocessTemplate = R.curry((esVersion, template) =>
+	template.replace(/<!-- CONDITION: (.+) -->\s*\n?([\s\S]*?)\n?\s*<!-- END CONDITION -->/g,
+		(_, condition, contents) => eval(condition) ? contents : ''));
 const groupToMarkdown = (utils, groupName) =>
 	`### ${ groupName }` + br(2) +
 	R.mapObjIndexed(utilToMarkdown, utils)
@@ -64,28 +65,37 @@ const jsFileForUtil = (esVersion, group, util) =>
 const readFile = filename => fs.readFile(filename, utf8);
 const writeFile = R.curry((filename, data) => fs.writeFile(filename, data, 'utf8'));
 
-
-cfg.groups
-.map(group => [group, utilitiesInGroup(group)])
-.into(R.fromPairs)
-.into(whenAllObj)
-.then(R.mapObjIndexed((utils, group) =>
-	utils.map(util => [
-		util,
-		jsFileForUtil(6, group, util)
-			.then(R.unless(R.isNil, readFile))
-	])
+const makeFile = (filename, esVersion) =>
+	cfg.groups
+	.map(group => [group, utilitiesInGroup(group)])
 	.into(R.fromPairs)
 	.into(whenAllObj)
-	.then(R.reject(R.isNil))
-))
-.then(whenAllDeep)
-.then(R.mapObjIndexed(groupToMarkdown))
-.then(R.values)
-.then(R.join(br(2)))
-.then(insertUtilities(readFile(cfg.template + 'README.md')))
-.then(writeFile('README.md'))
-.catch(err => console.log(err.stack));
+	.then(R.mapObjIndexed((utils, group) =>
+		utils.map(util => [
+			util,
+			jsFileForUtil(esVersion, group, util)
+				.then(R.unless(R.isNil, readFile))
+		])
+		.into(R.fromPairs)
+		.into(whenAllObj)
+		.then(R.reject(R.isNil))
+	))
+	.then(whenAllDeep)
+	.then(R.mapObjIndexed(groupToMarkdown))
+	.then(R.values)
+	.then(R.join(br(2)))
+	.then(insertUtilities(
+		readFile(cfg.template + 'README.md')
+		.then(preprocessTemplate(esVersion))
+	))
+	.then(writeFile(filename))
+	.catch(err => console.log(err.stack));
+
+
+
+makeFile('README.md', 6)
+.then(R.partial(makeFile, ['es5.md', 5]));
+
 
 
 

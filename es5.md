@@ -7,14 +7,36 @@ A collection of javascript utilities designed for copy & pasting into your proje
 
 ## The utilities
 
-<!-- CONDITION: esVersion === 6 -->
-The following adhere to the ES2015 standard. For ES5 utilities, [see the `es5.md` file.](es5.md)
-<!-- END CONDITION -->
-<!-- CONDITION: esVersion === 5 -->
-The following adhere to the ES5 standard. For ES2015 utilities, [see the `README.md` file.](README.md)
-<!-- END CONDITION -->
 
-<!-- UTILITIES HERE -->
+The following adhere to the ES5 standard. For ES2015 utilities, [see the `README.md` file.](README.md)
+
+### Object
+
+
+
+### Array
+
+#### toArray
+
+```js
+var toArray = Function.prototype.call.bind([].slice);
+```
+
+### String
+
+
+
+### Function
+
+
+
+### Logic
+
+
+
+### Browser
+
+
 
 
 ## License
