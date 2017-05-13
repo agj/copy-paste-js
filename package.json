@@ -6,7 +6,8 @@
     "test": "test"
   },
   "scripts": {
-    "test": "node test/"
+    "test": "node test/",
+    "build": "node src/"
   },
   "repository": {
     "type": "git",

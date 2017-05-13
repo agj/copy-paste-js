@@ -7,7 +7,7 @@ const JSDOM = require('jsdom').JSDOM;
 const babel = require('babel-core');
 const acorn = require('acorn');
 const escodegen = require('escodegen');
-require('dot-into').install();
+// require('dot-into').install(); // Only when debugging tests!
 
 const gen = require('./general');
 const cfg = gen.cfg;
