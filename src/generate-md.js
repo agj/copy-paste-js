@@ -1,49 +1,29 @@
 'use strict';
 
-const cfg = {
-	groups: [ 'Object', 'Array', 'String', 'Function', 'Logic', 'Browser' ],
-	utilities: 'src/utilities/',
-	template: 'src/template/',
-};
-
+const groups = [ 'Object', 'Array', 'String', 'Function', 'Logic', 'Browser' ];
 
 const R = require('ramda');
+const chalk = require('chalk');
 const fs = require('mz/fs');
 const glob = require('glob-promise');
 const path = require('path');
 const promisify = require('function-promisifier');
 require('dot-into').install();
 
+const _ = require('./general');
+const br = _.br;
+
 process.on(
     "unhandledRejection",
     function handleWarning( reason, promise ) {
-        console.log("UNHANDLED PROMISE REJECTION:");
-        console.log(reason);
+        console.log(chalk.red("UNHANDLED PROMISE REJECTION:"));
+        console.log(chalk.dim(reason));
     }
 );
 
-// Utilities
 
-const whenAll = Promise.all.bind(Promise);
-const whenAllObj = obj =>
-	Object.keys(obj)
-	.into(R.reduce((acc, prop) => whenAll([acc, obj[prop]]).then(([accResult, thisResult]) => {
-		accResult[prop] = thisResult;
-		return accResult;
-	}), Promise.resolve({})));
-const whenAllDeep = obj =>
-	obj.into(R.map(obj => {
-		if ('then' in obj) return obj;
-		return whenAllDeep(obj);
-	}))
-	.into(Array.isArray(obj) ? whenAll : whenAllObj);
-const log = R.tap(msg => console.log(msg));
-const br = n => '\n'.repeat(n);
+// Steps
 
-
-const preprocessTemplate = R.curry((esVersion, template) =>
-	template.replace(/<!-- CONDITION: (.+) -->\s*\n?([\s\S]*?)\n?\s*<!-- END CONDITION -->/g,
-		(_, condition, contents) => eval(condition) ? contents : ''));
 const groupToMarkdown = (utils, groupName) =>
 	`### ${ groupName }` + br(2) +
 	R.mapObjIndexed(utilToMarkdown, utils)
@@ -54,43 +34,25 @@ const utilToMarkdown = (code, utilName) =>
 	'```js' + br(1) +
 	code + br(1) +
 	'```';
+const objToSorted = R.curry((orderedKeys, obj) =>
+	R.toPairs(obj)
+	.into(R.sortBy(([key, value]) => orderedKeys.indexOf(key)))
+	.into(R.map(R.prop(1))));
+const preprocessTemplate = R.curry((esVersion, template) =>
+	template.replace(/<!-- CONDITION: (.+) -->\s*\n?([\s\S]*?)\n?\s*<!-- END CONDITION -->/g,
+		(_, condition, contents) => eval(condition) ? contents : ''));
 const insertUtilities = R.curry(promisify((context, insertion) => context.replace('<!-- UTILITIES HERE -->', insertion)));
-const utf8 = { encoding: 'utf8' };
-const utilitiesInGroup = group =>
-	glob(cfg.utilities + group + '/*/')
-	.then(R.map(R.replace(/.+\/([^\/]+)\/?$/, '$1')));
-const jsFileForUtil = (esVersion, group, util) =>
-	glob(`${cfg.utilities}${group}/${util}/es${esVersion}.js`)
-	.then(files => files.length > 0 ? files[0] : null);
-const readFile = filename => fs.readFile(filename, utf8);
-const writeFile = R.curry((filename, data) => fs.writeFile(filename, data, 'utf8'));
 
 const makeFile = (filename, esVersion) =>
-	cfg.groups
-	.map(group => [group, utilitiesInGroup(group)])
-	.into(R.fromPairs)
-	.into(whenAllObj)
-	.then(R.mapObjIndexed((utils, group) =>
-		utils.map(util => [
-			util,
-			jsFileForUtil(esVersion, group, util)
-				.then(R.unless(R.isNil, readFile))
-		])
-		.into(R.fromPairs)
-		.into(whenAllObj)
-		.then(R.reject(R.isNil))
-	))
-	.then(whenAllDeep)
+	_.resolveGroups(esVersion, groups)
 	.then(R.mapObjIndexed(groupToMarkdown))
-	.then(R.values)
+	.then(objToSorted(groups))
 	.then(R.join(br(2)))
 	.then(insertUtilities(
-		readFile(cfg.template + 'README.md')
+		_.readFile(_.dir.template + 'README.md')
 		.then(preprocessTemplate(esVersion))
 	))
-	.then(writeFile(filename))
-	.catch(err => console.log(err.stack));
-
+	.then(_.writeFile(filename));
 
 
 // Finally, process.
@@ -100,7 +62,4 @@ const makeFile = (filename, esVersion) =>
 	['es5.md', 5],
 ]
 .forEach(R.apply(makeFile));
-
-
-
 

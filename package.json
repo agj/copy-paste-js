@@ -6,7 +6,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "node test/",
+    "test": "node src/test",
     "build": "node src/generate-md"
   },
   "repository": {

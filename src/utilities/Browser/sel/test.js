@@ -1,6 +1,6 @@
 'use strict';
 
-var onLoad = require('../../../../test/general').onLoad;
+var onLoad = require('../../../general').onLoad;
 
 module.exports = function (sel, window) {
 	return function (assert) {
