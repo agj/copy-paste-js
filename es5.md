@@ -137,6 +137,8 @@ var after = function after(secs, fn) {
 };
 ```
 
+Executes the passed function `fn` with a delay of `secs`.
+
 #### alternate
 
 ```js
@@ -149,6 +151,8 @@ var alternate = function alternate(f, g) {
 };
 ```
 
+Alternately executes functions `f` and `g` upon each call.
+
 #### apply
 
 ```js
@@ -158,6 +162,8 @@ var apply = function apply(f) {
 	};
 };
 ```
+
+Returns a function that will take an array of arguments to call function `f` with.
 
 #### call
 
@@ -169,19 +175,15 @@ var call = function call(f) {
 };
 ```
 
+Returns a function that will call function `f` with any arguments supplied.
+
 #### callMethod
 
 ```js
-var callMethod = function callMethod(method) {
-  for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-    args[_key - 1] = arguments[_key];
-  }
-
-  return function (obj) {
-    return obj[method].apply(obj, args);
-  };
-};
+var callMethod = function callMethod(method, args) { return function (obj) { return args ? obj[method].apply(obj, args) : obj[method]() } };
 ```
+
+Takes a method name `method` and a list of arguments `args`, and returns a function that upon execution will take an object `obj` and call whatever method `method` in it with arguments `args`.
 
 #### counter
 
@@ -192,6 +194,8 @@ var counter = function counter() {
   };
 };
 ```
+
+Returns a function that upon each execution will return a number that is 1 greater than the last time, starting with 0.
 
 #### debounce
 
@@ -213,6 +217,8 @@ var debounce = function debounce(secs, fn) {
 };
 ```
 
+Takes a delay in seconds `secs` and a function `fn`, and returns a function that calls `fn` only after `secs` have passed without having been invoked. Useful, for instance, to make sure repeated changes executed in a small space of time don't cause too many expensive computations, and only when done make a calculation.
+
 #### log
 
 ```js
@@ -227,6 +233,8 @@ var log = function log() {
 };
 ```
 
+Takes a list of arguments `msg`, and returns a function that takes no arguments, but upon execution logs `msg` in the console.
+
 #### partial
 
 ```js
@@ -236,6 +244,8 @@ var partial = function partial(f, args1) {
   };
 };
 ```
+
+Takes a function `f` and a list of arguments `args1`, and returns a function that will invoke `f` with `args1` plus any other arguments passed to it.
 
 #### partialR
 
@@ -250,6 +260,8 @@ var partialR = function partialR(f, args1) {
   };
 };
 ```
+
+Takes a function `f` and a list of arguments `args1`, and returns a function that will invoke `f` with any arguments passed to it plus `args1` to its right.
 
 #### pipe
 
@@ -267,6 +279,8 @@ var pipe = function pipe() {
 };
 ```
 
+Takes any number of functions, and returns a function that will execute them from left to right, passing the return value of one as the input to the next.
+
 #### throttle
 
 ```js
@@ -282,6 +296,8 @@ var throttle = function throttle(secs, fn) {
 	};
 };
 ```
+
+Takes a delay `secs` and a function `fn`, and returns a function that will call `fn` once and ignore all subsequent calls until `secs` have elapsed.
 
 ### Logic
 
@@ -361,11 +377,15 @@ var makeEl = function makeEl(tag, attrs) {
 };
 ```
 
+Creates an element with the supplied tag name, attributes (defined in an object), and children. Can be used nested to create a tree.
+
 #### onLoad
 
 ```js
 var onLoad = function (cb) { return /interactive|complete/.test(document.readyState) ? setTimeout(cb, 0) : document.addEventListener('DOMContentLoaded', cb) };
 ```
+
+Executes the supplied function as soon as the DOM is ready.
 
 #### sel
 
@@ -373,11 +393,15 @@ var onLoad = function (cb) { return /interactive|complete/.test(document.readySt
 var sel = document.querySelector.bind(document);
 ```
 
+Returns the first element in the document that matches the given a CSS selector.
+
 #### selAll
 
 ```js
 var selAll = document.querySelectorAll.bind(document);
 ```
+
+Returns a list of all elements that match the provided CSS selector.
 
 
 ## Public domain license

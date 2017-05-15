@@ -89,6 +89,8 @@ const test = regex => text => regex.test(text);
 const after = (secs, fn) => setTimeout(fn, secs * 1000);
 ```
 
+Executes the passed function `fn` with a delay of `secs`.
+
 #### alternate
 
 ```js
@@ -101,11 +103,15 @@ const alternate = (f, g) => {
 };
 ```
 
+Alternately executes functions `f` and `g` upon each call.
+
 #### apply
 
 ```js
-const apply = f => (args) => f(...args);
+const apply = f => args => f(...args);
 ```
+
+Returns a function that will take an array of arguments to call function `f` with.
 
 #### call
 
@@ -113,17 +119,23 @@ const apply = f => (args) => f(...args);
 const call = f => (...args) => f(...args);
 ```
 
+Returns a function that will call function `f` with any arguments supplied.
+
 #### callMethod
 
 ```js
-const callMethod = (method, ...args) => obj => obj[method](...args);
+const callMethod = (method, args) => obj => args ? obj[method](...args) : obj[method]();
 ```
+
+Takes a method name `method` and a list of arguments `args`, and returns a function that upon execution will take an object `obj` and call whatever method `method` in it with arguments `args`.
 
 #### counter
 
 ```js
 const counter = () => { let i = 0; return () => i++ };
 ```
+
+Returns a function that upon each execution will return a number that is 1 greater than the last time, starting with 0.
 
 #### debounce
 
@@ -139,11 +151,15 @@ const debounce = (secs, fn) => {
 };
 ```
 
+Takes a delay in seconds `secs` and a function `fn`, and returns a function that calls `fn` only after `secs` have passed without having been invoked. Useful, for instance, to make sure repeated changes executed in a small space of time don't cause too many expensive computations, and only when done make a calculation.
+
 #### log
 
 ```js
 const log = (...msg) => () => console.log.apply(console, msg);
 ```
+
+Takes a list of arguments `msg`, and returns a function that takes no arguments, but upon execution logs `msg` in the console.
 
 #### partial
 
@@ -151,17 +167,23 @@ const log = (...msg) => () => console.log.apply(console, msg);
 const partial = (f, args1) => (...args2) => f.apply(null, args1.concat(args2));
 ```
 
+Takes a function `f` and a list of arguments `args1`, and returns a function that will invoke `f` with `args1` plus any other arguments passed to it.
+
 #### partialR
 
 ```js
 const partialR = (f, args1) => (...args2) => f.apply(null, args2.concat(args1));
 ```
 
+Takes a function `f` and a list of arguments `args1`, and returns a function that will invoke `f` with any arguments passed to it plus `args1` to its right.
+
 #### pipe
 
 ```js
 const pipe = (...fs) => fs.reduce((left, right) => (...args) => right(left(...args)));
 ```
+
+Takes any number of functions, and returns a function that will execute them from left to right, passing the return value of one as the input to the next.
 
 #### throttle
 
@@ -178,6 +200,8 @@ const throttle = (secs, fn) => {
 	};
 };
 ```
+
+Takes a delay `secs` and a function `fn`, and returns a function that will call `fn` once and ignore all subsequent calls until `secs` have elapsed.
 
 ### Logic
 
@@ -231,11 +255,15 @@ const makeEl = (tag, attrs, ...children) => {
 };
 ```
 
+Creates an element with the supplied tag name, attributes (defined in an object), and children. Can be used nested to create a tree.
+
 #### onLoad
 
 ```js
 const onLoad = cb => /interactive|complete/.test(document.readyState) ? setTimeout(cb, 0) : document.addEventListener('DOMContentLoaded', cb);
 ```
+
+Executes the supplied function as soon as the DOM is ready.
 
 #### sel
 
@@ -243,11 +271,15 @@ const onLoad = cb => /interactive|complete/.test(document.readyState) ? setTimeo
 const sel = document.querySelector.bind(document);
 ```
 
+Returns the first element in the document that matches the given a CSS selector.
+
 #### selAll
 
 ```js
 const selAll = document.querySelectorAll.bind(document);
 ```
+
+Returns a list of all elements that match the provided CSS selector.
 
 
 ## Public domain license

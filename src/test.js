@@ -25,6 +25,8 @@ const loadTest = (group, name) => require(`../${ _.dir.utilities }${ group }/${ 
 const evalCodeNode = (code) => eval('(' + code + ')');
 const evalCodeBrowser = (code) => new Function(['window', 'document'], 'return ' + code);
 
+const resolveJS = R.curry((esVersion, group, util) =>
+	R.unless(R.isNil, _.readFile, _.getFileForUtil(`es${ esVersion }.js`, group, util)));
 const processCode = R.curry((esVersion, code) =>
 	acorn.parse(code, { ecmaVersion: esVersion })
 	.body
@@ -54,7 +56,7 @@ const testBrowser = (esVersion, code, util, group) => {
 const runTests = esVersion =>
 	glob(_.dir.utilities + '*')
 	.then(R.map(_.getGroupName))
-	.then(_.resolveGroups(esVersion))
+	.then(_.resolveGroups(resolveJS(esVersion)))
 	.then(_.mapUtils(processCode(esVersion)))
 	.then(_.mapUtils((code, util, group) => {
 		if (group === 'Browser') testBrowser(esVersion, code, util, group);

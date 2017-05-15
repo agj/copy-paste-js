@@ -1,0 +1,1 @@
+Takes a list of arguments `msg`, and returns a function that takes no arguments, but upon execution logs `msg` in the console.

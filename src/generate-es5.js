@@ -16,17 +16,20 @@ process.on(
     }
 );
 
+const resolveJS = R.curry((group, util) =>
+	!_.getFileForUtil('es5.js', group, util)
+		? R.unless(R.isNil, _.readFile, _.getFileForUtil('es6.js', group, util))
+		: null);
+
 glob(_.dir.utilities + '*')
 .then(R.map(_.getGroupName))
-.then(_.resolveGroups(6))
+.then(_.resolveGroups(resolveJS))
 .then(_.mapUtils(_.toES5))
 .then(_.mapUtils((code, util, group) => {
 	const filename = `${ _.dir.utilities }${ group }/${ util }/es5.js`;
-	if (!fs.existsSync(filename)) {
-		console.log(chalk.green('CREATED ' + group + '/' + util));
-		console.log(chalk.dim(code));
-		fs.writeFileSync(filename, code, 'utf8');
-	}
+	console.log(chalk.green('CREATING ' + group + '/' + util));
+	console.log(chalk.dim(code));
+	fs.writeFileSync(filename, code, 'utf8');
 	return code;
 }));
 

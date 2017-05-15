@@ -1,0 +1,1 @@
+Returns a list of all elements that match the provided CSS selector.

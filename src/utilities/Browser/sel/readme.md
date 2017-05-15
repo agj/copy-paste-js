@@ -1,0 +1,1 @@
+Returns the first element in the document that matches the given a CSS selector.

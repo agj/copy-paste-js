@@ -1,1 +1,1 @@
-const callMethod = (method, ...args) => obj => obj[method](...args);
+const callMethod = (method, args) => obj => args ? obj[method](...args) : obj[method]();

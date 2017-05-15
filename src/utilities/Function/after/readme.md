@@ -1,0 +1,1 @@
+Executes the passed function `fn` with a delay of `secs`.

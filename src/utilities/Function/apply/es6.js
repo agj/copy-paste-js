@@ -1,1 +1,1 @@
-const apply = f => (args) => f(...args);
+const apply = f => args => f(...args);

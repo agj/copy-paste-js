@@ -5,6 +5,11 @@ const fs = require('mz/fs');
 const glob = require('glob-promise');
 const babel = require('babel-core');
 
+const filterObjIndexed = R.curry((p, obj) =>
+	Object.keys(obj)
+	.filter(key => p(obj[key], key, obj))
+	.reduce((r, key) => { r[key] = obj[key]; return r }, {}));
+
 const _ = {
 	dir: {
 		utilities: 'src/utilities/',
@@ -31,23 +36,21 @@ const _ = {
 	utilitiesInGroup: groupName =>
 		glob(_.dir.utilities + groupName + '/*/')
 		.then(R.map(_.getGroupName)),
-	jsFileForUtil: (esVersion, groupName, utilName) =>
-		`${ _.dir.utilities }${ groupName }/${ utilName }/es${ esVersion }.js`
+	getFileForUtil: (filename, groupName, utilName) =>
+		`${ _.dir.utilities }${ groupName }/${ utilName }/${ filename }`
 		.into(R.unless(fs.existsSync, R.always(null))),
-	resolveGroups: R.curry((esVersion, groups) =>
+	resolveGroups: R.curry((resolver, groups) =>
 		groups
 		.into(R.map(groupName => [groupName, _.utilitiesInGroup(groupName)]))
 		.into(R.fromPairs)
 		.into(_.whenAllObj)
-		.then(R.mapObjIndexed(_.resolveUtilities(esVersion)))
+		.then(R.mapObjIndexed(_.resolveUtilities(resolver)))
 		.then(_.whenAllObj)),
-	resolveUtilities: R.curry((esVersion, utilities, groupName) =>
+	resolveUtilities: R.curry((resolver, utilities, groupName) =>
 		utilities
 		.into(R.map(utilityName => [
 			utilityName,
-			R.unless(R.isNil, _.readFile,
-				_.jsFileForUtil(esVersion, groupName, utilityName)
-			)
+			resolver(groupName, utilityName)
 		]))
 		.into(R.fromPairs)
 		.into(R.reject(R.isNil))
@@ -55,6 +58,14 @@ const _ = {
 	mapUtils: R.curry((fn, groups) =>
 		R.mapObjIndexed(
 			(utils, groupName) => R.mapObjIndexed(
+				(contents, utilName) => fn(contents, utilName, groupName),
+				utils
+			),
+			groups
+		)),
+	filterUtils: R.curry((fn, groups) =>
+		R.mapObjIndexed(
+			(utils, groupName) => filterObjIndexed(
 				(contents, utilName) => fn(contents, utilName, groupName),
 				utils
 			),

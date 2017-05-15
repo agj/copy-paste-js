@@ -1,0 +1,1 @@
+Takes any number of functions, and returns a function that will execute them from left to right, passing the return value of one as the input to the next.

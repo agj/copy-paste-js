@@ -1,0 +1,1 @@
+Alternately executes functions `f` and `g` upon each call.

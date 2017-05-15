@@ -1,0 +1,1 @@
+Creates an element with the supplied tag name, attributes (defined in an object), and children. Can be used nested to create a tree.

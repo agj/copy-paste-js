@@ -8,6 +8,6 @@ module.exports = function (callMethod) {
 		assert.equal(callMethod('m')(o), o);
 		var g = function (a) { return a; }
 		var p = { m: g };
-		assert.equal(callMethod('m', 'a')(p), 'a');
+		assert.equal(callMethod('m', ['a'])(p), 'a');
 	};
 };

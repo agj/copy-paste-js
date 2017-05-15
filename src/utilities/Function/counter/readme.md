@@ -1,0 +1,1 @@
+Returns a function that upon each execution will return a number that is 1 greater than the last time, starting with 0.

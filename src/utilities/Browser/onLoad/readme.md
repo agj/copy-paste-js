@@ -1,0 +1,1 @@
+Executes the supplied function as soon as the DOM is ready.
