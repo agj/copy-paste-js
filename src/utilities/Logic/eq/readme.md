@@ -1,0 +1,1 @@
+Takes a value `a`, and returns a function that returns whether argument `b` is strictly equal to `a`.

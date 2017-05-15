@@ -129,16 +129,6 @@ var test = function test(regex) {
 
 ### Function
 
-#### after
-
-```js
-var after = function after(secs, fn) {
-  return setTimeout(fn, secs * 1000);
-};
-```
-
-Executes the passed function `fn` with a delay of `secs`.
-
 #### alternate
 
 ```js
@@ -217,7 +207,15 @@ var debounce = function debounce(secs, fn) {
 };
 ```
 
-Takes a delay in seconds `secs` and a function `fn`, and returns a function that calls `fn` only after `secs` have passed without having been invoked. Useful, for instance, to make sure repeated changes executed in a small space of time don't cause too many expensive computations, and only when done make a calculation.
+Takes a delay in seconds `secs` and a function `fn`, and returns a function that calls `fn` only after `secs` have passed without having been invoked. Useful, for instance, to make sure repeated changes executed in a small space of time don't cause too many expensive computations, and only when done perform a calculation.
+
+#### delay
+
+```js
+var delay = function (secs) { return function (fn) { setTimeout(fn, secs * 1000) } };
+```
+
+Takes a delay in seconds `secs`, and returns a function that takes any function `fn` and executes it only after `secs` have elapsed.
 
 #### log
 
@@ -301,6 +299,14 @@ Takes a delay `secs` and a function `fn`, and returns a function that will call 
 
 ### Logic
 
+#### complement
+
+```js
+var complement = function (f) { return function () { return !f.apply(undefined, arguments) } };
+```
+
+Takes a function `f` and returns a function that returns the boolean opposite of the value that `f` would return for the same arguments.
+
 #### eq
 
 ```js
@@ -310,6 +316,8 @@ var eq = function eq(a) {
   };
 };
 ```
+
+Takes a value `a`, and returns a function that returns whether argument `b` is strictly equal to `a`.
 
 #### gt
 
@@ -321,6 +329,8 @@ var gt = function gt(a) {
 };
 ```
 
+Takes a value `a`, and returns a function that returns whether argument `b` is greater than `a`.
+
 #### gte
 
 ```js
@@ -330,6 +340,8 @@ var gte = function gte(a) {
   };
 };
 ```
+
+Takes a value `a`, and returns a function that returns whether argument `b` is greater than or equal to `a`.
 
 #### lt
 
@@ -341,6 +353,8 @@ var lt = function lt(a) {
 };
 ```
 
+Takes a value `a`, and returns a function that returns whether argument `b` is less than `a`.
+
 #### lte
 
 ```js
@@ -351,15 +365,15 @@ var lte = function lte(a) {
 };
 ```
 
+Takes a value `a`, and returns a function that returns whether argument `b` is less than or equal to `a`.
+
 #### not
 
 ```js
-var not = function not(f) {
-  return function () {
-    return !f.apply(undefined, arguments);
-  };
-};
+var not = function (a) { return !a };
 ```
+
+Returns the boolean opposite of the argument passed.
 
 ### Browser
 

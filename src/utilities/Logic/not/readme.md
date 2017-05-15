@@ -1,0 +1,1 @@
+Returns the boolean opposite of the argument passed.

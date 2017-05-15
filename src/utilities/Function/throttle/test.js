@@ -6,7 +6,7 @@ module.exports = function (throttle) {
 		var start = Date.now();
 		var f = throttle(0.1, function (n) {
 			if (n === 0) assert.true(Date.now() - start < 100);
-			else if (n === 4) assert.true(Date.now() - start > 100);
+			else if (n === 4) assert.true(Date.now() - start >= 100);
 			else assert.notOk(true);
 		});
 		f(0);

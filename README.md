@@ -83,14 +83,6 @@ const test = regex => text => regex.test(text);
 
 ### Function
 
-#### after
-
-```js
-const after = (secs, fn) => setTimeout(fn, secs * 1000);
-```
-
-Executes the passed function `fn` with a delay of `secs`.
-
 #### alternate
 
 ```js
@@ -151,7 +143,15 @@ const debounce = (secs, fn) => {
 };
 ```
 
-Takes a delay in seconds `secs` and a function `fn`, and returns a function that calls `fn` only after `secs` have passed without having been invoked. Useful, for instance, to make sure repeated changes executed in a small space of time don't cause too many expensive computations, and only when done make a calculation.
+Takes a delay in seconds `secs` and a function `fn`, and returns a function that calls `fn` only after `secs` have passed without having been invoked. Useful, for instance, to make sure repeated changes executed in a small space of time don't cause too many expensive computations, and only when done perform a calculation.
+
+#### delay
+
+```js
+const delay = secs => fn => setTimeout(fn, secs * 1000);
+```
+
+Takes a delay in seconds `secs`, and returns a function that takes any function `fn` and executes it only after `secs` have elapsed.
 
 #### log
 
@@ -205,11 +205,21 @@ Takes a delay `secs` and a function `fn`, and returns a function that will call 
 
 ### Logic
 
+#### complement
+
+```js
+const complement = f => (...args) => !f(...args);
+```
+
+Takes a function `f` and returns a function that returns the boolean opposite of the value that `f` would return for the same arguments.
+
 #### eq
 
 ```js
 const eq = a => b => b === a;
 ```
+
+Takes a value `a`, and returns a function that returns whether argument `b` is strictly equal to `a`.
 
 #### gt
 
@@ -217,11 +227,15 @@ const eq = a => b => b === a;
 const gt = a => b => b > a;
 ```
 
+Takes a value `a`, and returns a function that returns whether argument `b` is greater than `a`.
+
 #### gte
 
 ```js
 const gte = a => b => b >= a;
 ```
+
+Takes a value `a`, and returns a function that returns whether argument `b` is greater than or equal to `a`.
 
 #### lt
 
@@ -229,17 +243,23 @@ const gte = a => b => b >= a;
 const lt = a => b => b < a;
 ```
 
+Takes a value `a`, and returns a function that returns whether argument `b` is less than `a`.
+
 #### lte
 
 ```js
 const lte = a => b => b <= a;
 ```
 
+Takes a value `a`, and returns a function that returns whether argument `b` is less than or equal to `a`.
+
 #### not
 
 ```js
-const not = f => (...args) => !f(...args);
+const not = a => !a;
 ```
+
+Returns the boolean opposite of the argument passed.
 
 ### Browser
 

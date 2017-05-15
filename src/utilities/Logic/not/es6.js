@@ -1,1 +1,1 @@
-const not = f => (...args) => !f(...args);
+const not = a => !a;

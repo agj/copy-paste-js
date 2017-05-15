@@ -1,5 +1,1 @@
-var not = function not(f) {
-  return function () {
-    return !f.apply(undefined, arguments);
-  };
-};
+var not = function (a) { return !a };

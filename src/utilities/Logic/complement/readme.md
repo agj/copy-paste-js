@@ -1,0 +1,1 @@
+Takes a function `f` and returns a function that returns the boolean opposite of the value that `f` would return for the same arguments.

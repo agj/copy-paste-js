@@ -1,0 +1,1 @@
+Takes a value `a`, and returns a function that returns whether argument `b` is greater than or equal to `a`.
