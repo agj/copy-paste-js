@@ -375,6 +375,22 @@ var not = function (a) { return !a };
 
 Returns the boolean opposite of the argument passed.
 
+#### unless
+
+```js
+var unless = function (pred) { return function (f) { return function (a) { return pred(a) ? a : f(a) } } };
+```
+
+If predicate function `pred` returns a **falsy** value when passed `a`, the return value will be `f(a)`, otherwise `a`.
+
+#### when
+
+```js
+var when = function (pred) { return function (f) { return function (a) { return pred(a) ? f(a) : a } } };
+```
+
+If predicate function `pred` returns a **truthy** value when passed `a`, the return value will be `f(a)`, otherwise `a`.
+
 ### Browser
 
 #### makeEl

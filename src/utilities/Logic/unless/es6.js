@@ -1,0 +1,1 @@
+const unless = pred => f => a => pred(a) ? a : f(a);

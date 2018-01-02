@@ -261,6 +261,22 @@ const not = a => !a;
 
 Returns the boolean opposite of the argument passed.
 
+#### unless
+
+```js
+const unless = pred => f => a => pred(a) ? a : f(a);
+```
+
+If predicate function `pred` returns a **falsy** value when passed `a`, the return value will be `f(a)`, otherwise `a`.
+
+#### when
+
+```js
+const when = pred => f => a => pred(a) ? f(a) : a;
+```
+
+If predicate function `pred` returns a **truthy** value when passed `a`, the return value will be `f(a)`, otherwise `a`.
+
 ### Browser
 
 #### makeEl
