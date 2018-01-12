@@ -16,14 +16,14 @@ process.on(
     "unhandledRejection",
     function handleWarning( reason, promise ) {
         console.log(chalk.red("UNHANDLED PROMISE REJECTION:"));
-        console.log(chalk.dim(reason));
+        console.log(chalk.dim(reason.stack));
     }
 );
 
 
 const loadTest = (group, name) => require(`../${ _.dir.utilities }${ group }/${ name }/test.js`);
 const evalCodeNode = (code) => eval('(' + code + ')');
-const evalCodeBrowser = (code) => new Function(['window', 'document'], 'return ' + code);
+const evalCodeBrowser = (dom, code) => dom.window.eval('(' + code + ')');
 
 const resolveJS = R.curry((esVersion, group, util) =>
 	R.unless(R.isNil, _.readFile, _.getFileForUtil(`es${ esVersion }.js`, group, util)));
@@ -35,7 +35,7 @@ const processCode = R.curry((esVersion, code) =>
 	.into(escodegen.generate));
 const testNode = (esVersion, code, util, group) =>
 	test(
-		`${ group }/${ util } (ES${ esVersion })`,
+		`(ES${ esVersion }) ${ group }/${ util }`,
 		loadTest(group, util)(evalCodeNode(code))
 	);
 const testBrowser = (esVersion, code, util, group) => {
@@ -45,11 +45,12 @@ const testBrowser = (esVersion, code, util, group) => {
 				<span class="contained">some text</span>
 				<span>other text</span>
 			</div>
-		</body></html>`
+		</body></html>`,
+		{ runScripts: 'outside-only' }
 	);
 	return test(
-		`${ group }/${ util } (ES${ esVersion })`,
-		loadTest(group, util)(evalCodeBrowser(code)(dom.window, dom.window.document), dom.window)
+		`(ES${ esVersion }) ${ group }/${ util }`,
+		loadTest(group, util)(evalCodeBrowser(dom, code), dom.window)
 	);
 };
 
