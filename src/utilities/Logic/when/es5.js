@@ -1,1 +1,0 @@
-var when = function (pred) { return function (f) { return function (a) { return pred(a) ? f(a) : a } } };
