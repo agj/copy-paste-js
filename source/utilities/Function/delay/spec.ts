@@ -2,10 +2,14 @@ import delay from "./";
 
 describe("delay", () => {
   test("test", async () => {
-    expect.assertions(1);
-    var start = Date.now();
-    delay(0.1)(function () {
-      expect(Date.now() - start >= 0.1 * 1000).toBe(true);
-    });
+    const spy = jest.fn();
+
+    delay(1)(spy);
+
+    expect(spy).toHaveBeenCalledTimes(0);
+
+    jest.advanceTimersByTime(1001);
+
+    expect(spy).toHaveBeenCalledTimes(1);
   });
 });
