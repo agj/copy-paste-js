@@ -2,7 +2,7 @@ import selAll from "./";
 
 describe("selAll", () => {
   test("test", async () => {
-    assert.plan(4);
+    expect.assertions(4);
     var selected = selAll("#container span");
     assert.equals(selected.length, 2);
     assert.equals(selected[0].tagName, "SPAN");

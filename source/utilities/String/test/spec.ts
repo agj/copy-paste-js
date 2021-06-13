@@ -2,7 +2,7 @@ import test from "./";
 
 describe("test", () => {
   test("test", async () => {
-    assert.plan(2);
+    expect.assertions(2);
 
     assert.equal(test(/included/)("text includedtext"), true);
     assert.equal(test(/notincluded/)("text includedtext"), false);

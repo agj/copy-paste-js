@@ -2,7 +2,7 @@ import partial from "./";
 
 describe("partial", () => {
   test("test", async () => {
-    assert.plan(4);
+    expect.assertions(4);
 
     const f = (a, b) => a - b;
 

@@ -2,7 +2,7 @@ import lt from "./";
 
 describe("lt", () => {
   test("test", async () => {
-    assert.plan(3);
+    expect.assertions(3);
 
     assert.equal(lt(1)(0), true);
     assert.equal(lt(0)(0), false);

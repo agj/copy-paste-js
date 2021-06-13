@@ -2,7 +2,7 @@ import apply from "./";
 
 describe("apply", () => {
   test("test", async () => {
-    assert.plan(1);
+    expect.assertions(1);
     var f = function (a, b, c) {
       return a + b + c;
     };

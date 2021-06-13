@@ -2,7 +2,7 @@ import toArray from "./";
 
 describe("toArray", () => {
   test("test", async () => {
-    assert.plan(1);
+    expect.assertions(1);
 
     var args = function () {
       return arguments;

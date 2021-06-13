@@ -2,7 +2,7 @@ import pipe from "./";
 
 describe("pipe", () => {
   test("test", async () => {
-    assert.plan(1);
+    expect.assertions(1);
     var f = pipe(
       function (a, b) {
         return a + b + "c";

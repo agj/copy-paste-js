@@ -2,7 +2,7 @@ import makeEl from "./";
 
 describe("makeEl", () => {
   test("test", async () => {
-    assert.plan(5);
+    expect.assertions(5);
     var el = makeEl(
       "div",
       { id: "some-id", class: "a-class" },

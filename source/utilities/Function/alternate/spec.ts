@@ -2,13 +2,13 @@ import alternate from "./";
 
 describe("alternate", () => {
   test("test", async () => {
-    assert.plan(4);
+    expect.assertions(4);
     var f = alternate(
       function (n) {
-        assert.true(n === 0 || n === 2);
+        expect(n === 0 || n === 2).toBe(true);
       },
       function (n) {
-        assert.true(n === 1 || n === 3);
+        expect(n === 1 || n === 3).toBe(true);
       }
     );
     f(0);

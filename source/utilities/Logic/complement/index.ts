@@ -1,4 +1,3 @@
-export const complement =
-  (f) =>
+export default (f) =>
   (...args) =>
     !f(...args);

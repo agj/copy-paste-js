@@ -1,4 +1,3 @@
-export const log =
-  (...msg) =>
+export default (...msg) =>
   () =>
     console.log.apply(console, msg);

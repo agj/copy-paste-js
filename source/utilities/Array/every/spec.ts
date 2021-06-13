@@ -2,12 +2,12 @@ import every from "./";
 
 describe("every", () => {
   test("test", async () => {
-    assert.plan(2);
+    expect.assertions(2);
     var is10 = function (a) {
       return a === 10;
     };
 
-    assert.true(every(is10)([10, 10, 10]));
-    assert.false(every(is10)([0, 1, 10, 10, 6]));
+    expect(every(is10)([10, 10, 10])).toBe(true);
+    expect(every(is10)([0, 1, 10, 10, 6])).toBe(false);
   });
 });

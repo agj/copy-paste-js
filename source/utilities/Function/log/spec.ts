@@ -2,7 +2,7 @@ import log from "./";
 
 describe("log", () => {
   test("test", async () => {
-    assert.plan(2);
+    expect.assertions(2);
     var originalLog = console.log;
     var modLog = function () {
       console.log = originalLog;

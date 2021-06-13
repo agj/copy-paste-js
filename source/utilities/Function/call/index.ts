@@ -1,4 +1,3 @@
-export const call =
-  (f) =>
+export default (f) =>
   (...args) =>
     f(...args);

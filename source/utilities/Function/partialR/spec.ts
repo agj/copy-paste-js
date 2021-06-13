@@ -2,7 +2,7 @@ import partialR from "./";
 
 describe("partialR", () => {
   test("test", async () => {
-    assert.plan(4);
+    expect.assertions(4);
 
     const f = (a, b) => a - b;
 

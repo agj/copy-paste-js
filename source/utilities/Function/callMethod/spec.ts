@@ -2,7 +2,7 @@ import callMethod from "./";
 
 describe("callMethod", () => {
   test("test", async () => {
-    assert.plan(2);
+    expect.assertions(2);
     var f = function () {
       return this;
     };

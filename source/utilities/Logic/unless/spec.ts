@@ -2,7 +2,7 @@ import unless from "./";
 
 describe("unless", () => {
   test("test", async () => {
-    assert.plan(2);
+    expect.assertions(2);
 
     var is5 = function (a) {
       return a === 5;

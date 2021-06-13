@@ -2,11 +2,11 @@ import throttle from "./";
 
 describe("throttle", () => {
   test("test", async () => {
-    assert.plan(2);
+    expect.assertions(2);
     var start = Date.now();
     var f = throttle(0.1, function (n) {
-      if (n === 0) assert.true(Date.now() - start < 100);
-      else if (n === 4) assert.true(Date.now() - start >= 100);
+      if (n === 0) expect(Date.now() - start < 100).toBe(true);
+      else if (n === 4) expect(Date.now() - start >= 100).toBe(true);
       else assert.notOk(true);
     });
     f(0);
