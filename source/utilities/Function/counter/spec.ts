@@ -4,9 +4,9 @@ describe("counter", () => {
   test("test", async () => {
     expect.assertions(4);
     var c = counter();
-    assert.equal(c(), 0);
-    assert.equal(c(), 1);
-    assert.equal(c(), 2);
-    assert.equal(c(), 3);
+    expect(c()).toBe(0);
+    expect(c()).toBe(1);
+    expect(c()).toBe(2);
+    expect(c()).toBe(3);
   });
 });

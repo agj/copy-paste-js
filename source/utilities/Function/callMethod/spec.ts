@@ -7,11 +7,11 @@ describe("callMethod", () => {
       return this;
     };
     var o = { m: f };
-    assert.equal(callMethod("m")(o), o);
+    expect(callMethod("m")(o)).toEqual(o);
     var g = function (a) {
       return a;
     };
     var p = { m: g };
-    assert.equal(callMethod("m", ["a"])(p), "a");
+    expect(callMethod("m", ["a"])(p)).toBe("a");
   });
 });

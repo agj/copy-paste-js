@@ -1,13 +1,19 @@
-"use strict";
+import onLoad from "./";
 
-module.exports = (onLoad, window) => (assert) => {
-  expect.assertions(3);
+describe("onLoad", () => {
+  test("test", async () => {
+    expect.assertions(3);
 
-  let first = true;
-  onLoad(() => {
-    expect(first).toBe(false);
-    assert.equal(window.document.readyState, "complete");
+    const spy = jest.fn(() => {
+      expect(document.readyState).toBe("complete");
+    });
+
+    onLoad(spy);
+
+    expect(spy).toHaveBeenCalledTimes(0);
+
+    jest.advanceTimersByTime(1000);
+
+    expect(spy).toHaveBeenCalledTimes(1);
   });
-  expect(first).toBe(true);
-  first = false;
-};
+});

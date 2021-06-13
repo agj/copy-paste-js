@@ -4,6 +4,6 @@ describe("get", () => {
   test("test", async () => {
     expect.assertions(1);
 
-    assert.equal(get("test")({ test: 10 }), 10);
+    expect(get("test")({ test: 10 })).toBe(10);
   });
 });

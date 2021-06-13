@@ -4,8 +4,8 @@ describe("gte", () => {
   test("test", async () => {
     expect.assertions(3);
 
-    assert.equal(gte(0)(1), true);
-    assert.equal(gte(0)(0), true);
-    assert.equal(gte(1)(0), false);
+    expect(gte(0)(1)).toBe(true);
+    expect(gte(0)(0)).toBe(true);
+    expect(gte(1)(0)).toBe(false);
   });
 });

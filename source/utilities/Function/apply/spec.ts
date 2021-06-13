@@ -6,6 +6,6 @@ describe("apply", () => {
     var f = function (a, b, c) {
       return a + b + c;
     };
-    assert.equal(apply(f)(["a", "b", "c"]), "abc");
+    expect(apply(f)(["a", "b", "c"])).toBe("abc");
   });
 });

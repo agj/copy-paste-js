@@ -11,7 +11,7 @@ describe("when", () => {
       return b * 2;
     };
 
-    assert.equal(when(is5)(double)(5), 10);
-    assert.equal(when(is5)(double)(6), 6);
+    expect(when(is5)(double)(5)).toBe(10);
+    expect(when(is5)(double)(6)).toBe(6);
   });
 });

@@ -1,14 +1,21 @@
-"use strict";
+import sel from "./";
 
-var onLoad = require("../../../general").onLoad;
+describe("sel", () => {
+  test("test", async () => {
+    const parent = document.createElement("parent");
+    parent.setAttribute("id", "container");
+    const child = document.createElement("span");
+    child.setAttribute("class", "contained");
+    child.textContent = "some text";
+    parent.appendChild(child);
+    document.body.appendChild(parent);
 
-module.exports = function (sel, window) {
-  return function (assert) {
-    expect.assertions(2);
-    onLoad(window.document, function () {
-      var selected = sel("#container .contained");
-      assert.equal(selected.tagName, "SPAN");
-      assert.equal(selected.textContent, "some text");
-    });
-  };
-};
+    const selected = sel("#container .contained");
+
+    expect(selected).toBeDefined();
+    expect(selected.tagName).toBe("SPAN");
+    expect(selected.textContent).toBe("some text");
+
+    document.body.textContent = "";
+  });
+});

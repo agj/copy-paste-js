@@ -11,7 +11,7 @@ describe("unless", () => {
       return b * 2;
     };
 
-    assert.equal(unless(is5)(double)(5), 5);
-    assert.equal(unless(is5)(double)(6), 12);
+    expect(unless(is5)(double)(5)).toBe(5);
+    expect(unless(is5)(double)(6)).toBe(12);
   });
 });

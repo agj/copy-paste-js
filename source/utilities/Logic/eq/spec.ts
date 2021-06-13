@@ -4,7 +4,7 @@ describe("eq", () => {
   test("test", async () => {
     expect.assertions(2);
 
-    assert.equal(eq(0)(0), true);
-    assert.equal(eq(0)(1), false);
+    expect(eq(0)(0)).toBe(true);
+    expect(eq(0)(1)).toBe(false);
   });
 });

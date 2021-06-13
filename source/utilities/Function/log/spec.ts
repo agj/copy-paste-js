@@ -2,15 +2,18 @@ import log from "./";
 
 describe("log", () => {
   test("test", async () => {
-    expect.assertions(2);
     var originalLog = console.log;
-    var modLog = function () {
-      console.log = originalLog;
-      assert.deepEqual(Array.from(arguments), ["a", "message"]);
-    };
-    console.log = modLog;
-    log("a", "message")();
-    console.log = modLog;
-    log("a", "message")("ignored");
+    const spy = jest.fn();
+    console.log = spy;
+
+    expect(log("a", "message")()).toBeUndefined();
+    expect(spy).toHaveBeenLastCalledWith("a", "message");
+
+    expect(log("message2")("something")).toBe("something");
+    expect(spy).toHaveBeenLastCalledWith("message2", "something");
+
+    expect(spy).toHaveBeenCalledTimes(2);
+
+    console.log = originalLog;
   });
 });

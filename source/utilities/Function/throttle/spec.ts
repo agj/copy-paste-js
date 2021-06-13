@@ -2,19 +2,26 @@ import throttle from "./";
 
 describe("throttle", () => {
   test("test", async () => {
-    expect.assertions(2);
-    var start = Date.now();
-    var f = throttle(0.1, function (n) {
-      if (n === 0) expect(Date.now() - start < 100).toBe(true);
-      else if (n === 4) expect(Date.now() - start >= 100).toBe(true);
-      else assert.notOk(true);
-    });
-    f(0);
-    f(1);
-    f(2);
-    f(3);
-    setTimeout(function () {
-      f(4);
-    }, 100);
+    const spy = jest.fn();
+
+    const f = throttle(0.01, spy);
+
+    f("first");
+    f("second");
+    f("third");
+
+    jest.advanceTimersByTime(1000);
+
+    expect(spy).toHaveBeenCalledTimes(1);
+    expect(spy).toHaveBeenLastCalledWith("first");
+
+    f("fourth");
+    f("fifth");
+    f("sixth");
+
+    jest.advanceTimersByTime(1000);
+
+    expect(spy).toHaveBeenCalledTimes(2);
+    expect(spy).toHaveBeenLastCalledWith("fourth");
   });
 });

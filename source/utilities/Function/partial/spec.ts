@@ -6,9 +6,9 @@ describe("partial", () => {
 
     const f = (a, b) => a - b;
 
-    assert.equal(f(1, 2), -1);
-    assert.equal(partial(f, [])(1, 2), -1);
-    assert.equal(partial(f, [1])(2), -1);
-    assert.equal(partial(f, [1, 2])(), -1);
+    expect(f(1, 2)).toBe(-1);
+    expect(partial(f, [])(1, 2)).toBe(-1);
+    expect(partial(f, [1])(2)).toBe(-1);
+    expect(partial(f, [1, 2])()).toBe(-1);
   });
 });

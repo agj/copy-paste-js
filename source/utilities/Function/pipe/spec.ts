@@ -14,6 +14,6 @@ describe("pipe", () => {
         return abcd + "e";
       }
     );
-    assert.equal(f("a", "b"), "abcde");
+    expect(f("a", "b")).toBe("abcde");
   });
 });
