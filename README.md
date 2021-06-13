@@ -6,6 +6,6 @@ A collection of small JavaScript (and TypeScript) utilities designed for copy-an
 
 Follow the link to the version you need:
 
+- [Compatible JavaScript (ES5)](./compatible-js.md)
 - [Modern JavaScript (for up-to-date browsers/runtimes)](./modern-js.md)
-- [Legacy ECMAScript 5 (for compatibility)](./legacy-js.md)
 - [TypeScript](./typescript.md)
