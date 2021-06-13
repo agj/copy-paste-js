@@ -12,8 +12,7 @@ const postprocessJs = (code: string) => code.replace(/"use strict";(\n)+/, "");
 
 const babelConfigModern = {
   filename: "index.ts",
-  presets: ["@babel/preset-typescript", "@babel/preset-env"],
-  targets: "defaults",
+  presets: ["@babel/preset-typescript", "modern-browsers"],
 } as any;
 const babelConfigLegacy = {
   filename: "index.ts",
@@ -24,11 +23,13 @@ type Utility = {
   group: string;
   name: string;
   tsCode: string;
+  jsCodeModern: string;
+  jsCodeLegacy: string;
 };
 
 const utilityFiles = await glob(`./utilities/*/*/index.ts`);
 
-const getUtilities = () =>
+const getUtilities = (): Promise<Array<Utility>> =>
   Promise.all(
     utilityFiles.map(async (path) => {
       const name = getName(path);
