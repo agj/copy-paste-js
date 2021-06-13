@@ -1,1 +1,1 @@
-const selAll = document.querySelectorAll.bind(document);
+export default document.querySelectorAll.bind(document);

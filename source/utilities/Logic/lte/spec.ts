@@ -1,11 +1,11 @@
-'use strict';
+import lte from "./";
 
-module.exports = function (lte) {
-	return function (assert) {
-		assert.plan(3);
+describe("lte", () => {
+  test("test", async () => {
+    assert.plan(3);
 
-		assert.equal(lte(1)(0), true);
-		assert.equal(lte(0)(0), true);
-		assert.equal(lte(0)(1), false);
-	};
-};
+    assert.equal(lte(1)(0), true);
+    assert.equal(lte(0)(0), true);
+    assert.equal(lte(0)(1), false);
+  });
+});

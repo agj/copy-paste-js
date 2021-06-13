@@ -1,1 +1,1 @@
-const eq = a => b => b === a;
+export default (a) => (b) => b === a;

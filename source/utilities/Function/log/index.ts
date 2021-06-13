@@ -1,1 +1,4 @@
-const log = (...msg) => () => console.log.apply(console, msg);
+export const log =
+  (...msg) =>
+  () =>
+    console.log.apply(console, msg);

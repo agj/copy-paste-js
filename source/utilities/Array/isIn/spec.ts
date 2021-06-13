@@ -1,10 +1,10 @@
-'use strict';
+import isIn from "./";
 
-module.exports = function (isIn) {
-	return function (assert) {
-		assert.plan(2);
+describe("isIn", () => {
+  test("test", async () => {
+    assert.plan(2);
 
-		assert.true( isIn(['a', 'b', 'c'])('b'));
-		assert.false(isIn(['a', 'b', 'c'])('d'));
-	};
-};
+    assert.true(isIn(["a", "b", "c"])("b"));
+    assert.false(isIn(["a", "b", "c"])("d"));
+  });
+});

@@ -1,10 +1,10 @@
-'use strict';
+import test from "./";
 
-module.exports = function (test) {
-	return function (assert) {
-		assert.plan(2);
+describe("test", () => {
+  test("test", async () => {
+    assert.plan(2);
 
-		assert.equal(test(/included/)('text includedtext'), true);
-		assert.equal(test(/notincluded/)('text includedtext'), false);
-	};
-};
+    assert.equal(test(/included/)("text includedtext"), true);
+    assert.equal(test(/notincluded/)("text includedtext"), false);
+  });
+});

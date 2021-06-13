@@ -1,9 +1,9 @@
-'use strict';
+import prepend from "./";
 
-module.exports = function (prepend) {
-	return function (assert) {
-		assert.plan(1);
+describe("prepend", () => {
+  test("test", async () => {
+    assert.plan(1);
 
-		assert.equal(prepend('before')('after'), 'beforeafter');
-	};
-};
+    assert.equal(prepend("before")("after"), "beforeafter");
+  });
+});

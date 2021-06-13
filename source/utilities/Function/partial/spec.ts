@@ -1,14 +1,14 @@
-'use strict';
+import partial from "./";
 
-module.exports = function (partial) {
-	return function (assert) {
-		assert.plan(4);
+describe("partial", () => {
+  test("test", async () => {
+    assert.plan(4);
 
-		const f = (a, b) => a - b;
+    const f = (a, b) => a - b;
 
-		assert.equal(f(1, 2), -1);
-		assert.equal(partial(f, [])(1, 2), -1);
-		assert.equal(partial(f, [1])(2), -1);
-		assert.equal(partial(f, [1, 2])(), -1);
-	};
-};
+    assert.equal(f(1, 2), -1);
+    assert.equal(partial(f, [])(1, 2), -1);
+    assert.equal(partial(f, [1])(2), -1);
+    assert.equal(partial(f, [1, 2])(), -1);
+  });
+});

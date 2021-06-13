@@ -1,1 +1,4 @@
-const counter = () => { let i = 0; return () => i++ };
+export default () => {
+  let i = 0;
+  return () => i++;
+};

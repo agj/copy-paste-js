@@ -1,1 +1,1 @@
-const some = p => list => list.some(p);
+export default (p) => (list) => list.some(p);

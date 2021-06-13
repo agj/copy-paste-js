@@ -1,1 +1,1 @@
-const every = p => list => list.every(p);
+export default (p) => (list) => list.every(p);

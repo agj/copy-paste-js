@@ -1,1 +1,6 @@
-const pipe = (...fs) => fs.reduce((left, right) => (...args) => right(left(...args)));
+export default (...fs) =>
+  fs.reduce(
+    (left, right) =>
+      (...args) =>
+        right(left(...args))
+  );

@@ -1,1 +1,1 @@
-const test = regex => text => regex.test(text);
+export default (regex) => (text) => regex.test(text);

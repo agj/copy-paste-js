@@ -1,1 +1,1 @@
-const when = pred => f => a => pred(a) ? f(a) : a;
+export default (pred) => (f) => (a) => pred(a) ? f(a) : a;

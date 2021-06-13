@@ -1,1 +1,1 @@
-const delay = secs => fn => setTimeout(fn, secs * 1000);
+export default (secs) => (fn) => setTimeout(fn, secs * 1000);

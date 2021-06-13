@@ -1,11 +1,13 @@
-'use strict';
+import toArray from "./";
 
-module.exports = function (toArray) {
-	return function (assert) {
-		assert.plan(1);
+describe("toArray", () => {
+  test("test", async () => {
+    assert.plan(1);
 
-		var args = function () { return arguments };
+    var args = function () {
+      return arguments;
+    };
 
-		assert.deepEqual(toArray(args('a', 'b', 'c')), ['a', 'b', 'c']);
-	};
-};
+    assert.deepEqual(toArray(args("a", "b", "c")), ["a", "b", "c"]);
+  });
+});

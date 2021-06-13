@@ -1,1 +1,1 @@
-const lt = a => b => b < a;
+export default (a) => (b) => b < a;

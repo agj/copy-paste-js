@@ -1,1 +1,4 @@
-const call = f => (...args) => f(...args);
+export const call =
+  (f) =>
+  (...args) =>
+    f(...args);

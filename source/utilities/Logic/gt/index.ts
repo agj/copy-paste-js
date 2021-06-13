@@ -1,1 +1,1 @@
-const gt = a => b => b > a;
+export default (a) => (b) => b > a;

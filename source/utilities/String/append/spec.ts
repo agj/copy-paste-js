@@ -1,9 +1,9 @@
-'use strict';
+import append from "./";
 
-module.exports = function (append) {
-	return function (assert) {
-		assert.plan(1);
+describe("append", () => {
+  test("test", async () => {
+    assert.plan(1);
 
-		assert.equal(append('after')('before'), 'beforeafter');
-	};
-};
+    assert.equal(append("after")("before"), "beforeafter");
+  });
+});

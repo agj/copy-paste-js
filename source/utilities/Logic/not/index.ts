@@ -1,1 +1,1 @@
-const not = a => !a;
+export default (a) => !a;

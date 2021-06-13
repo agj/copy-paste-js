@@ -1,1 +1,1 @@
-const sel = document.querySelector.bind(document);
+export default document.querySelector.bind(document);
