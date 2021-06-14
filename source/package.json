@@ -2,6 +2,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "build": "node --loader ts-node/esm ./build.ts",
     "test": "jest",
     "test:watch": "jest --watch"
   },
