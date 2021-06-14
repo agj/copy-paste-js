@@ -41,10 +41,14 @@ type UtilitySingleTarget = {
 };
 
 type SplitUtilities = {
-  legacy: Array<UtilitySingleTarget>;
+  compatible: Array<UtilitySingleTarget>;
   modern: Array<UtilitySingleTarget>;
   typescript: Array<UtilitySingleTarget>;
 };
+
+type CodeFormat = "js" | "ts";
+
+type TemplateName = "compatible-js" | "modern-js" | "typescript";
 
 const utilityPaths = await glob(`./utilities/*/*/index.ts`);
 
@@ -69,7 +73,7 @@ const getUtilities = (): Promise<Array<Utility>> =>
     })
   );
 
-const getTemplate = (name: string) =>
+const getTemplate = (name: TemplateName | "license") =>
   fs.readFile(`./templates/${name}.md`, "utf-8");
 
 const utilityToMd =
@@ -83,8 +87,8 @@ ${code}
 ${fence}`;
 
 const utilitiesToMd = async (
-  codeFormat: string,
-  templateName: string,
+  codeFormat: CodeFormat,
+  templateName: TemplateName,
   utilities: Array<UtilitySingleTarget>
 ) => {
   const template = await getTemplate(templateName);
@@ -106,30 +110,31 @@ const utilitiesToMd = async (
 const splitUtilitiesByTarget = (utilities: Array<Utility>): SplitUtilities =>
   utilities.reduce(
     (
-      { legacy, modern, typescript },
+      { compatible, modern, typescript },
       { group, name, tsCode, jsCodeModern, jsCodeLegacy }
     ) => ({
-      legacy: [...legacy, { group, name, code: jsCodeLegacy }],
+      compatible: [...compatible, { group, name, code: jsCodeLegacy }],
       modern: [...modern, { group, name, code: jsCodeModern }],
       typescript: [...typescript, { group, name, code: tsCode }],
     }),
-    { legacy: [], modern: [], typescript: [] }
+    { compatible: [], modern: [], typescript: [] }
   );
 
 getUtilities()
   .then(splitUtilitiesByTarget)
-  .then(async ({ legacy, modern, typescript }) => {
-    const compatibleMd = postprocessMd(
-      await utilitiesToMd("js", "compatible-js", legacy)
-    );
-    const modernMd = postprocessMd(
-      await utilitiesToMd("js", "modern-js", modern)
-    );
-    const typescriptMd = postprocessMd(
-      await utilitiesToMd("ts", "typescript", typescript)
-    );
+  .then(({ compatible, modern, typescript }) => {
+    const builds: Array<
+      [CodeFormat, TemplateName, Array<UtilitySingleTarget>]
+    > = [
+      ["js", "compatible-js", compatible],
+      ["js", "modern-js", modern],
+      ["ts", "typescript", typescript],
+    ];
 
-    fs.writeFile("../compatible-js.md", compatibleMd, "utf-8");
-    fs.writeFile("../modern-js.md", modernMd, "utf-8");
-    fs.writeFile("../typescript.md", typescriptMd, "utf-8");
+    builds.forEach(async ([codeFormat, templateName, utilities]) => {
+      const md = postprocessMd(
+        await utilitiesToMd(codeFormat, templateName, utilities)
+      );
+      fs.writeFile(`../${templateName}.md`, md, "utf-8");
+    });
   });
