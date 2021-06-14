@@ -3,33 +3,36 @@
 These are TypeScript utilities apt for transpilation into JavaScript. [For other versions and more information, check here.](./README.md)
 
 
-
 ## Array
+
 
 ### every
 
-```
+```ts
 const every = (p) => (list) => list.every(p);
 
 ```
 
+
 ### isIn
 
-```
+```ts
 const isIn = (list) => (obj) => list.some((a) => a === obj);
 
 ```
 
+
 ### some
 
-```
+```ts
 const some = (p) => (list) => list.some(p);
 
 ```
 
+
 ### uniq
 
-```
+```ts
 const uniq = (list) => {
   const seen = [];
   return list.filter((item) =>
@@ -39,12 +42,12 @@ const uniq = (list) => {
 
 ```
 
-
 ## Browser
+
 
 ### makeEl
 
-```
+```ts
 const makeEl = (tag, attrs, ...children) => {
   const el = document.createElement(tag);
   if (attrs)
@@ -59,9 +62,10 @@ const makeEl = (tag, attrs, ...children) => {
 
 ```
 
+
 ### onLoad
 
-```
+```ts
 const onLoad = (cb) =>
   /interactive|complete/.test(document.readyState)
     ? setTimeout(cb, 0)
@@ -69,26 +73,28 @@ const onLoad = (cb) =>
 
 ```
 
+
 ### sel
 
-```
+```ts
 const sel = document.querySelector.bind(document);
 
 ```
 
+
 ### selAll
 
-```
+```ts
 const selAll = document.querySelectorAll.bind(document);
 
 ```
 
-
 ## Function
+
 
 ### alternate
 
-```
+```ts
 const alternate = (f, g) => {
   let state = false;
   return (...args) => {
@@ -99,25 +105,28 @@ const alternate = (f, g) => {
 
 ```
 
+
 ### apply
 
-```
+```ts
 const apply = (f) => (args) => f(...args);
 
 ```
 
+
 ### call
 
-```
+```ts
 const call = (f) =>
   (...args) =>
     f(...args);
 
 ```
 
+
 ### callMethod
 
-```
+```ts
 const callMethod = <
     Key extends string | number | symbol,
     Arg,
@@ -132,9 +141,10 @@ const callMethod = <
 
 ```
 
+
 ### counter
 
-```
+```ts
 const counter = () => {
   let i = 0;
   return () => i++;
@@ -142,9 +152,10 @@ const counter = () => {
 
 ```
 
+
 ### debounce
 
-```
+```ts
 const debounce = <T>(secs: number, fn: (...args: Array<T>) => unknown) => {
   const delay = secs * 1000;
   let timeoutID;
@@ -157,16 +168,18 @@ const debounce = <T>(secs: number, fn: (...args: Array<T>) => unknown) => {
 
 ```
 
+
 ### delay
 
-```
+```ts
 const delay = (secs) => (fn) => setTimeout(fn, secs * 1000);
 
 ```
 
+
 ### log
 
-```
+```ts
 const log = (...msg: any) =>
   (arg?: any) => {
     console.log.apply(console, arg === undefined ? msg : [...msg, arg]);
@@ -175,27 +188,30 @@ const log = (...msg: any) =>
 
 ```
 
+
 ### partial
 
-```
+```ts
 const partial = (f, args1) =>
   (...args2) =>
     f.apply(null, args1.concat(args2));
 
 ```
 
+
 ### partialR
 
-```
+```ts
 const partialR = (f, args1) =>
   (...args2) =>
     f.apply(null, args2.concat(args1));
 
 ```
 
+
 ### pipe
 
-```
+```ts
 const pipe = (...fs) =>
   fs.reduce(
     (left, right) =>
@@ -205,9 +221,10 @@ const pipe = (...fs) =>
 
 ```
 
+
 ### throttle
 
-```
+```ts
 const throttle = <T>(secs: number, fn: (...args: Array<T>) => unknown) => {
   const waitTime = secs * 1000;
   let last = 0;
@@ -222,87 +239,96 @@ const throttle = <T>(secs: number, fn: (...args: Array<T>) => unknown) => {
 
 ```
 
-
 ## Logic
+
 
 ### complement
 
-```
+```ts
 const complement = (f) =>
   (...args) =>
     !f(...args);
 
 ```
 
+
 ### eq
 
-```
+```ts
 const eq = (a) => (b) => b === a;
 
 ```
 
+
 ### gt
 
-```
+```ts
 const gt = (a) => (b) => b > a;
 
 ```
 
+
 ### gte
 
-```
+```ts
 const gte = (a) => (b) => b >= a;
 
 ```
 
+
 ### lt
 
-```
+```ts
 const lt = (a) => (b) => b < a;
 
 ```
 
+
 ### lte
 
-```
+```ts
 const lte = (a) => (b) => b <= a;
 
 ```
 
+
 ### not
 
-```
+```ts
 const not = (a) => !a;
 
 ```
 
+
 ### unless
 
-```
+```ts
 const unless = (pred) => (f) => (a) => pred(a) ? a : f(a);
 
 ```
 
+
 ### when
 
-```
+```ts
 const when = (pred) => (f) => (a) => pred(a) ? f(a) : a;
 
 ```
 
-
 ## Object
+
 
 ### get
 
-```
+```ts
 const get = (prop) => (obj) => obj[prop];
 
 ```
 
+
 ### merge
 
-```
+```ts
 const merge = (o1) => (o2) => {
   var r = {};
   Object.keys(o1).forEach((prop) => (r[prop] = o1[prop]));
@@ -312,30 +338,31 @@ const merge = (o1) => (o2) => {
 
 ```
 
-
 ## String
+
 
 ### append
 
-```
+```ts
 const append = (a) => (b) => b + a;
 
 ```
 
+
 ### prepend
 
-```
+```ts
 const prepend = (a) => (b) => a + b;
 
 ```
 
+
 ### test
 
-```
+```ts
 const test = (regex) => (text) => regex.test(text);
 
 ```
-
 
 ## Public domain license
 

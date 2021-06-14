@@ -9,6 +9,7 @@ const getName = (path: string) => path.match(pathRegex)?.[2] ?? "";
 const postprocessTs = (name: string, code: string) =>
   code.replace("export default ", `const ${name} = `);
 const postprocessJs = (code: string) => code.replace(/"use strict";(\n)+/, "");
+const fence = "```";
 
 const babelConfigModern = {
   filename: "index.ts",
@@ -39,11 +40,11 @@ type SplitUtilities = {
   typescript: Array<UtilitySingleTarget>;
 };
 
-const utilityFiles = await glob(`./utilities/*/*/index.ts`);
+const utilityPaths = await glob(`./utilities/*/*/index.ts`);
 
 const getUtilities = (): Promise<Array<Utility>> =>
   Promise.all(
-    utilityFiles.map(async (path) => {
+    utilityPaths.map(async (path) => {
       const name = getName(path);
       const tsCode = postprocessTs(name, await fs.readFile(path, "utf-8"));
       const jsCodeModern = postprocessJs(
@@ -65,10 +66,18 @@ const getUtilities = (): Promise<Array<Utility>> =>
 const getTemplate = (name: string) =>
   fs.readFile(`./templates/${name}.md`, "utf-8");
 
-const utilityToMd = ({ name, code }: UtilitySingleTarget) =>
-  "### " + name + "\n\n" + "```\n" + code + "\n```";
+const utilityToMd =
+  (codeFormat: string) =>
+  ({ name, code }: UtilitySingleTarget) =>
+    `
+### ${name}
+
+${fence}${codeFormat}
+${code}
+${fence}`;
 
 const utilitiesToMd = async (
+  codeFormat: string,
   templateName: string,
   utilities: Array<UtilitySingleTarget>
 ) => {
@@ -78,14 +87,14 @@ const utilitiesToMd = async (
   const grouped = groupBy(prop("group"), utilities);
 
   const utilitiesMd = Object.keys(grouped)
-    .map((group) => {
-      return (
-        "## " + group + "\n\n" + grouped[group].map(utilityToMd).join("\n\n")
-      );
-    })
-    .join("\n\n\n");
+    .map(
+      (group) =>
+        `## ${group}\n\n` +
+        grouped[group].map(utilityToMd(codeFormat)).join("\n\n")
+    )
+    .join("\n\n");
 
-  return template + "\n\n\n" + utilitiesMd + "\n\n\n" + license;
+  return template + "\n\n" + utilitiesMd + "\n\n" + license;
 };
 
 const splitUtilitiesByTarget = (utilities: Array<Utility>): SplitUtilities =>
@@ -104,12 +113,11 @@ const splitUtilitiesByTarget = (utilities: Array<Utility>): SplitUtilities =>
 getUtilities()
   .then(splitUtilitiesByTarget)
   .then(async ({ legacy, modern, typescript }) => {
-    const compatibleMd = await utilitiesToMd("compatible-js", legacy);
-    const modernMd = await utilitiesToMd("modern-js", modern);
-    const typescriptMd = await utilitiesToMd("typescript", typescript);
+    const compatibleMd = await utilitiesToMd("js", "compatible-js", legacy);
+    const modernMd = await utilitiesToMd("js", "modern-js", modern);
+    const typescriptMd = await utilitiesToMd("ts", "typescript", typescript);
 
     fs.writeFile("../compatible-js.md", compatibleMd, "utf-8");
     fs.writeFile("../modern-js.md", modernMd, "utf-8");
     fs.writeFile("../typescript.md", typescriptMd, "utf-8");
-  })
-  .then((result) => {});
+  });

@@ -3,12 +3,12 @@
 These are utilities that adhere to the ECMAScript 5 standard, for compatibility with environments that might not be up-to-date. [For other versions and more information, check here.](./README.md)
 
 
-
 ## Array
+
 
 ### every
 
-```
+```js
 var every = function every(p) {
   return function (list) {
     return list.every(p);
@@ -16,9 +16,10 @@ var every = function every(p) {
 };
 ```
 
+
 ### isIn
 
-```
+```js
 var isIn = function isIn(list) {
   return function (obj) {
     return list.some(function (a) {
@@ -28,9 +29,10 @@ var isIn = function isIn(list) {
 };
 ```
 
+
 ### some
 
-```
+```js
 var some = function some(p) {
   return function (list) {
     return list.some(p);
@@ -38,9 +40,10 @@ var some = function some(p) {
 };
 ```
 
+
 ### uniq
 
-```
+```js
 var uniq = function uniq(list) {
   var seen = [];
   return list.filter(function (item) {
@@ -51,12 +54,12 @@ var uniq = function uniq(list) {
 };
 ```
 
-
 ## Browser
+
 
 ### makeEl
 
-```
+```js
 var makeEl = function makeEl(tag, attrs) {
   var el = document.createElement(tag);
   if (attrs) Object.keys(attrs).forEach(function (attr) {
@@ -76,9 +79,10 @@ var makeEl = function makeEl(tag, attrs) {
 };
 ```
 
+
 ### onLoad
 
-```
+```js
 var onLoad = function onLoad(cb) {
   return /interactive|complete/.test(document.readyState) ? setTimeout(cb, 0) : document.addEventListener("DOMContentLoaded", cb, {
     once: true
@@ -86,24 +90,26 @@ var onLoad = function onLoad(cb) {
 };
 ```
 
+
 ### sel
 
-```
+```js
 var sel = document.querySelector.bind(document);
 ```
 
+
 ### selAll
 
-```
+```js
 var selAll = document.querySelectorAll.bind(document);
 ```
 
-
 ## Function
+
 
 ### alternate
 
-```
+```js
 var alternate = function alternate(f, g) {
   var state = false;
   return function () {
@@ -113,9 +119,10 @@ var alternate = function alternate(f, g) {
 };
 ```
 
+
 ### apply
 
-```
+```js
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -135,9 +142,10 @@ var apply = function apply(f) {
 };
 ```
 
+
 ### call
 
-```
+```js
 var call = function call(f) {
   return function () {
     return f.apply(void 0, arguments);
@@ -145,9 +153,10 @@ var call = function call(f) {
 };
 ```
 
+
 ### callMethod
 
-```
+```js
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -167,9 +176,10 @@ var callMethod = function callMethod(method, args) {
 };
 ```
 
+
 ### counter
 
-```
+```js
 var counter = function counter() {
   var i = 0;
   return function () {
@@ -178,9 +188,10 @@ var counter = function counter() {
 };
 ```
 
+
 ### debounce
 
-```
+```js
 var debounce = function debounce(secs, fn) {
   var delay = secs * 1000;
   var timeoutID;
@@ -201,9 +212,10 @@ var debounce = function debounce(secs, fn) {
 };
 ```
 
+
 ### delay
 
-```
+```js
 var delay = function delay(secs) {
   return function (fn) {
     return setTimeout(fn, secs * 1000);
@@ -211,9 +223,10 @@ var delay = function delay(secs) {
 };
 ```
 
+
 ### log
 
-```
+```js
 var log = function log() {
   for (var _len = arguments.length, msg = new Array(_len), _key = 0; _key < _len; _key++) {
     msg[_key] = arguments[_key];
@@ -226,9 +239,10 @@ var log = function log() {
 };
 ```
 
+
 ### partial
 
-```
+```js
 var partial = function partial(f, args1) {
   return function () {
     for (var _len = arguments.length, args2 = new Array(_len), _key = 0; _key < _len; _key++) {
@@ -240,9 +254,10 @@ var partial = function partial(f, args1) {
 };
 ```
 
+
 ### partialR
 
-```
+```js
 var partialR = function partialR(f, args1) {
   return function () {
     for (var _len = arguments.length, args2 = new Array(_len), _key = 0; _key < _len; _key++) {
@@ -254,9 +269,10 @@ var partialR = function partialR(f, args1) {
 };
 ```
 
+
 ### pipe
 
-```
+```js
 var pipe = function pipe() {
   for (var _len = arguments.length, fs = new Array(_len), _key = 0; _key < _len; _key++) {
     fs[_key] = arguments[_key];
@@ -270,9 +286,10 @@ var pipe = function pipe() {
 };
 ```
 
+
 ### throttle
 
-```
+```js
 var throttle = function throttle(secs, fn) {
   var waitTime = secs * 1000;
   var last = 0;
@@ -287,12 +304,12 @@ var throttle = function throttle(secs, fn) {
 };
 ```
 
-
 ## Logic
+
 
 ### complement
 
-```
+```js
 var complement = function complement(f) {
   return function () {
     return !f.apply(void 0, arguments);
@@ -300,9 +317,10 @@ var complement = function complement(f) {
 };
 ```
 
+
 ### eq
 
-```
+```js
 var eq = function eq(a) {
   return function (b) {
     return b === a;
@@ -310,9 +328,10 @@ var eq = function eq(a) {
 };
 ```
 
+
 ### gt
 
-```
+```js
 var gt = function gt(a) {
   return function (b) {
     return b > a;
@@ -320,9 +339,10 @@ var gt = function gt(a) {
 };
 ```
 
+
 ### gte
 
-```
+```js
 var gte = function gte(a) {
   return function (b) {
     return b >= a;
@@ -330,9 +350,10 @@ var gte = function gte(a) {
 };
 ```
 
+
 ### lt
 
-```
+```js
 var lt = function lt(a) {
   return function (b) {
     return b < a;
@@ -340,9 +361,10 @@ var lt = function lt(a) {
 };
 ```
 
+
 ### lte
 
-```
+```js
 var lte = function lte(a) {
   return function (b) {
     return b <= a;
@@ -350,17 +372,19 @@ var lte = function lte(a) {
 };
 ```
 
+
 ### not
 
-```
+```js
 var not = function not(a) {
   return !a;
 };
 ```
 
+
 ### unless
 
-```
+```js
 var unless = function unless(pred) {
   return function (f) {
     return function (a) {
@@ -370,9 +394,10 @@ var unless = function unless(pred) {
 };
 ```
 
+
 ### when
 
-```
+```js
 var when = function when(pred) {
   return function (f) {
     return function (a) {
@@ -382,12 +407,12 @@ var when = function when(pred) {
 };
 ```
 
-
 ## Object
+
 
 ### get
 
-```
+```js
 var get = function get(prop) {
   return function (obj) {
     return obj[prop];
@@ -395,9 +420,10 @@ var get = function get(prop) {
 };
 ```
 
+
 ### merge
 
-```
+```js
 var merge = function merge(o1) {
   return function (o2) {
     var r = {};
@@ -412,12 +438,12 @@ var merge = function merge(o1) {
 };
 ```
 
-
 ## String
+
 
 ### append
 
-```
+```js
 var append = function append(a) {
   return function (b) {
     return b + a;
@@ -425,9 +451,10 @@ var append = function append(a) {
 };
 ```
 
+
 ### prepend
 
-```
+```js
 var prepend = function prepend(a) {
   return function (b) {
     return a + b;
@@ -435,16 +462,16 @@ var prepend = function prepend(a) {
 };
 ```
 
+
 ### test
 
-```
+```js
 var test = function test(regex) {
   return function (text) {
     return regex.test(text);
   };
 };
 ```
-
 
 ## Public domain license
 

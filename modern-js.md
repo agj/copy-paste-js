@@ -3,42 +3,45 @@
 These are utilities that adhere to the ECMAScript 2015 standard, to use in relatively modern runtimes. [For other versions and more information, check here.](./README.md)
 
 
-
 ## Array
+
 
 ### every
 
-```
+```js
 const every = p => list => list.every(p);
 ```
 
+
 ### isIn
 
-```
+```js
 const isIn = list => obj => list.some(a => a === obj);
 ```
 
+
 ### some
 
-```
+```js
 const some = p => list => list.some(p);
 ```
 
+
 ### uniq
 
-```
+```js
 const uniq = list => {
   const seen = [];
   return list.filter(item => seen.some(a => a === item) ? false : (seen.push(item), true));
 };
 ```
 
-
 ## Browser
+
 
 ### makeEl
 
-```
+```js
 const makeEl = (tag, attrs, ...children) => {
   const el = document.createElement(tag);
   if (attrs) Object.keys(attrs).forEach(attr => el.setAttribute(attr, attrs[attr]));
@@ -47,32 +50,35 @@ const makeEl = (tag, attrs, ...children) => {
 };
 ```
 
+
 ### onLoad
 
-```
+```js
 const onLoad = cb => /interactive|complete/.test(document.readyState) ? setTimeout(cb, 0) : document.addEventListener("DOMContentLoaded", cb, {
   once: true
 });
 ```
 
+
 ### sel
 
-```
+```js
 const sel = document.querySelector.bind(document);
 ```
 
+
 ### selAll
 
-```
+```js
 const selAll = document.querySelectorAll.bind(document);
 ```
 
-
 ## Function
+
 
 ### alternate
 
-```
+```js
 const alternate = (f, g) => {
   let state = false;
   return (...args) => {
@@ -82,36 +88,41 @@ const alternate = (f, g) => {
 };
 ```
 
+
 ### apply
 
-```
+```js
 const apply = f => args => f(...args);
 ```
 
+
 ### call
 
-```
+```js
 const call = f => (...args) => f(...args);
 ```
 
+
 ### callMethod
 
-```
+```js
 const callMethod = (method, args) => obj => args ? obj[method](...args) : obj[method]();
 ```
 
+
 ### counter
 
-```
+```js
 const counter = () => {
   let i = 0;
   return () => i++;
 };
 ```
 
+
 ### debounce
 
-```
+```js
 const debounce = (secs, fn) => {
   const delay = secs * 1000;
   let timeoutID;
@@ -125,42 +136,48 @@ const debounce = (secs, fn) => {
 };
 ```
 
+
 ### delay
 
-```
+```js
 const delay = secs => fn => setTimeout(fn, secs * 1000);
 ```
 
+
 ### log
 
-```
+```js
 const log = (...msg) => arg => {
   console.log.apply(console, arg === undefined ? msg : [...msg, arg]);
   return arg;
 };
 ```
 
+
 ### partial
 
-```
+```js
 const partial = (f, args1) => (...args2) => f.apply(null, args1.concat(args2));
 ```
 
+
 ### partialR
 
-```
+```js
 const partialR = (f, args1) => (...args2) => f.apply(null, args2.concat(args1));
 ```
 
+
 ### pipe
 
-```
+```js
 const pipe = (...fs) => fs.reduce((left, right) => (...args) => right(left(...args)));
 ```
 
+
 ### throttle
 
-```
+```js
 const throttle = (secs, fn) => {
   const waitTime = secs * 1000;
   let last = 0;
@@ -175,75 +192,84 @@ const throttle = (secs, fn) => {
 };
 ```
 
-
 ## Logic
+
 
 ### complement
 
-```
+```js
 const complement = f => (...args) => !f(...args);
 ```
 
+
 ### eq
 
-```
+```js
 const eq = a => b => b === a;
 ```
 
+
 ### gt
 
-```
+```js
 const gt = a => b => b > a;
 ```
 
+
 ### gte
 
-```
+```js
 const gte = a => b => b >= a;
 ```
 
+
 ### lt
 
-```
+```js
 const lt = a => b => b < a;
 ```
 
+
 ### lte
 
-```
+```js
 const lte = a => b => b <= a;
 ```
 
+
 ### not
 
-```
+```js
 const not = a => !a;
 ```
 
+
 ### unless
 
-```
+```js
 const unless = pred => f => a => pred(a) ? a : f(a);
 ```
 
+
 ### when
 
-```
+```js
 const when = pred => f => a => pred(a) ? f(a) : a;
 ```
 
-
 ## Object
+
 
 ### get
 
-```
+```js
 const get = prop => obj => obj[prop];
 ```
 
+
 ### merge
 
-```
+```js
 const merge = o1 => o2 => {
   var r = {};
   Object.keys(o1).forEach(prop => r[prop] = o1[prop]);
@@ -252,27 +278,28 @@ const merge = o1 => o2 => {
 };
 ```
 
-
 ## String
+
 
 ### append
 
-```
+```js
 const append = a => b => b + a;
 ```
 
+
 ### prepend
 
-```
+```js
 const prepend = a => b => a + b;
 ```
 
+
 ### test
 
-```
+```js
 const test = regex => text => regex.test(text);
 ```
-
 
 ## Public domain license
 
