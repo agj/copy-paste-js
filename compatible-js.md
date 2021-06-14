@@ -2,9 +2,7 @@
 
 These are utilities that adhere to the ECMAScript 5 standard, for compatibility with environments that might not be up-to-date. [For other versions and more information, check here.](./README.md)
 
-
 ## Array
-
 
 ### every
 
@@ -15,7 +13,6 @@ var every = function every(p) {
   };
 };
 ```
-
 
 ### isIn
 
@@ -29,7 +26,6 @@ var isIn = function isIn(list) {
 };
 ```
 
-
 ### some
 
 ```js
@@ -40,7 +36,6 @@ var some = function some(p) {
 };
 ```
 
-
 ### uniq
 
 ```js
@@ -49,54 +44,63 @@ var uniq = function uniq(list) {
   return list.filter(function (item) {
     return seen.some(function (a) {
       return a === item;
-    }) ? false : (seen.push(item), true);
+    })
+      ? false
+      : (seen.push(item), true);
   });
 };
 ```
 
 ## Browser
 
-
 ### makeEl
 
 ```js
 var makeEl = function makeEl(tag, attrs) {
   var el = document.createElement(tag);
-  if (attrs) Object.keys(attrs).forEach(function (attr) {
-    return el.setAttribute(attr, attrs[attr]);
-  });
+  if (attrs)
+    Object.keys(attrs).forEach(function (attr) {
+      return el.setAttribute(attr, attrs[attr]);
+    });
 
-  for (var _len = arguments.length, children = new Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
+  for (
+    var _len = arguments.length,
+      children = new Array(_len > 2 ? _len - 2 : 0),
+      _key = 2;
+    _key < _len;
+    _key++
+  ) {
     children[_key - 2] = arguments[_key];
   }
 
-  children.map(function (obj) {
-    return typeof obj === "string" ? document.createTextNode(obj) : obj;
-  }).forEach(function (node) {
-    return el.appendChild(node);
-  });
+  children
+    .map(function (obj) {
+      return typeof obj === "string" ? document.createTextNode(obj) : obj;
+    })
+    .forEach(function (node) {
+      return el.appendChild(node);
+    });
   return el;
 };
 ```
-
 
 ### onLoad
 
 ```js
 var onLoad = function onLoad(cb) {
-  return /interactive|complete/.test(document.readyState) ? setTimeout(cb, 0) : document.addEventListener("DOMContentLoaded", cb, {
-    once: true
-  });
+  return /interactive|complete/.test(document.readyState)
+    ? setTimeout(cb, 0)
+    : document.addEventListener("DOMContentLoaded", cb, {
+        once: true,
+      });
 };
 ```
-
 
 ### sel
 
 ```js
 var sel = document.querySelector.bind(document);
 ```
-
 
 ### selAll
 
@@ -105,7 +109,6 @@ var selAll = document.querySelectorAll.bind(document);
 ```
 
 ## Function
-
 
 ### alternate
 
@@ -119,21 +122,53 @@ var alternate = function alternate(f, g) {
 };
 ```
 
-
 ### apply
 
 ```js
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+function _toConsumableArray(arr) {
+  return (
+    _arrayWithoutHoles(arr) ||
+    _iterableToArray(arr) ||
+    _unsupportedIterableToArray(arr) ||
+    _nonIterableSpread()
+  );
+}
 
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _nonIterableSpread() {
+  throw new TypeError(
+    "Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."
+  );
+}
 
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+function _unsupportedIterableToArray(o, minLen) {
+  if (!o) return;
+  if (typeof o === "string") return _arrayLikeToArray(o, minLen);
+  var n = Object.prototype.toString.call(o).slice(8, -1);
+  if (n === "Object" && o.constructor) n = o.constructor.name;
+  if (n === "Map" || n === "Set") return Array.from(o);
+  if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n))
+    return _arrayLikeToArray(o, minLen);
+}
 
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+function _iterableToArray(iter) {
+  if (
+    (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null) ||
+    iter["@@iterator"] != null
+  )
+    return Array.from(iter);
+}
 
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+function _arrayWithoutHoles(arr) {
+  if (Array.isArray(arr)) return _arrayLikeToArray(arr);
+}
 
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+function _arrayLikeToArray(arr, len) {
+  if (len == null || len > arr.length) len = arr.length;
+  for (var i = 0, arr2 = new Array(len); i < len; i++) {
+    arr2[i] = arr[i];
+  }
+  return arr2;
+}
 
 var apply = function apply(f) {
   return function (args) {
@@ -141,7 +176,6 @@ var apply = function apply(f) {
   };
 };
 ```
-
 
 ### call
 
@@ -153,29 +187,62 @@ var call = function call(f) {
 };
 ```
 
-
 ### callMethod
 
 ```js
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+function _toConsumableArray(arr) {
+  return (
+    _arrayWithoutHoles(arr) ||
+    _iterableToArray(arr) ||
+    _unsupportedIterableToArray(arr) ||
+    _nonIterableSpread()
+  );
+}
 
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _nonIterableSpread() {
+  throw new TypeError(
+    "Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."
+  );
+}
 
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+function _unsupportedIterableToArray(o, minLen) {
+  if (!o) return;
+  if (typeof o === "string") return _arrayLikeToArray(o, minLen);
+  var n = Object.prototype.toString.call(o).slice(8, -1);
+  if (n === "Object" && o.constructor) n = o.constructor.name;
+  if (n === "Map" || n === "Set") return Array.from(o);
+  if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n))
+    return _arrayLikeToArray(o, minLen);
+}
 
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+function _iterableToArray(iter) {
+  if (
+    (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null) ||
+    iter["@@iterator"] != null
+  )
+    return Array.from(iter);
+}
 
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+function _arrayWithoutHoles(arr) {
+  if (Array.isArray(arr)) return _arrayLikeToArray(arr);
+}
 
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+function _arrayLikeToArray(arr, len) {
+  if (len == null || len > arr.length) len = arr.length;
+  for (var i = 0, arr2 = new Array(len); i < len; i++) {
+    arr2[i] = arr[i];
+  }
+  return arr2;
+}
 
 var callMethod = function callMethod(method, args) {
   return function (obj) {
-    return args ? obj[method].apply(obj, _toConsumableArray(args)) : obj[method]();
+    return args
+      ? obj[method].apply(obj, _toConsumableArray(args))
+      : obj[method]();
   };
 };
 ```
-
 
 ### counter
 
@@ -187,7 +254,6 @@ var counter = function counter() {
   };
 };
 ```
-
 
 ### debounce
 
@@ -203,7 +269,11 @@ var debounce = function debounce(secs, fn) {
   return function () {
     clearTimeout(timeoutID);
 
-    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+    for (
+      var _len = arguments.length, args = new Array(_len), _key = 0;
+      _key < _len;
+      _key++
+    ) {
       args[_key] = arguments[_key];
     }
 
@@ -211,7 +281,6 @@ var debounce = function debounce(secs, fn) {
   };
 };
 ```
-
 
 ### delay
 
@@ -223,12 +292,15 @@ var delay = function delay(secs) {
 };
 ```
 
-
 ### log
 
 ```js
 var log = function log() {
-  for (var _len = arguments.length, msg = new Array(_len), _key = 0; _key < _len; _key++) {
+  for (
+    var _len = arguments.length, msg = new Array(_len), _key = 0;
+    _key < _len;
+    _key++
+  ) {
     msg[_key] = arguments[_key];
   }
 
@@ -239,13 +311,16 @@ var log = function log() {
 };
 ```
 
-
 ### partial
 
 ```js
 var partial = function partial(f, args1) {
   return function () {
-    for (var _len = arguments.length, args2 = new Array(_len), _key = 0; _key < _len; _key++) {
+    for (
+      var _len = arguments.length, args2 = new Array(_len), _key = 0;
+      _key < _len;
+      _key++
+    ) {
       args2[_key] = arguments[_key];
     }
 
@@ -254,13 +329,16 @@ var partial = function partial(f, args1) {
 };
 ```
 
-
 ### partialR
 
 ```js
 var partialR = function partialR(f, args1) {
   return function () {
-    for (var _len = arguments.length, args2 = new Array(_len), _key = 0; _key < _len; _key++) {
+    for (
+      var _len = arguments.length, args2 = new Array(_len), _key = 0;
+      _key < _len;
+      _key++
+    ) {
       args2[_key] = arguments[_key];
     }
 
@@ -269,12 +347,15 @@ var partialR = function partialR(f, args1) {
 };
 ```
 
-
 ### pipe
 
 ```js
 var pipe = function pipe() {
-  for (var _len = arguments.length, fs = new Array(_len), _key = 0; _key < _len; _key++) {
+  for (
+    var _len = arguments.length, fs = new Array(_len), _key = 0;
+    _key < _len;
+    _key++
+  ) {
     fs[_key] = arguments[_key];
   }
 
@@ -285,7 +366,6 @@ var pipe = function pipe() {
   });
 };
 ```
-
 
 ### throttle
 
@@ -306,7 +386,6 @@ var throttle = function throttle(secs, fn) {
 
 ## Logic
 
-
 ### complement
 
 ```js
@@ -316,7 +395,6 @@ var complement = function complement(f) {
   };
 };
 ```
-
 
 ### eq
 
@@ -328,7 +406,6 @@ var eq = function eq(a) {
 };
 ```
 
-
 ### gt
 
 ```js
@@ -338,7 +415,6 @@ var gt = function gt(a) {
   };
 };
 ```
-
 
 ### gte
 
@@ -350,7 +426,6 @@ var gte = function gte(a) {
 };
 ```
 
-
 ### lt
 
 ```js
@@ -360,7 +435,6 @@ var lt = function lt(a) {
   };
 };
 ```
-
 
 ### lte
 
@@ -372,7 +446,6 @@ var lte = function lte(a) {
 };
 ```
 
-
 ### not
 
 ```js
@@ -380,7 +453,6 @@ var not = function not(a) {
   return !a;
 };
 ```
-
 
 ### unless
 
@@ -393,7 +465,6 @@ var unless = function unless(pred) {
   };
 };
 ```
-
 
 ### when
 
@@ -409,7 +480,6 @@ var when = function when(pred) {
 
 ## Object
 
-
 ### get
 
 ```js
@@ -420,7 +490,6 @@ var get = function get(prop) {
 };
 ```
 
-
 ### merge
 
 ```js
@@ -428,10 +497,10 @@ var merge = function merge(o1) {
   return function (o2) {
     var r = {};
     Object.keys(o1).forEach(function (prop) {
-      return r[prop] = o1[prop];
+      return (r[prop] = o1[prop]);
     });
     Object.keys(o2).forEach(function (prop) {
-      return r[prop] = o2[prop];
+      return (r[prop] = o2[prop]);
     });
     return r;
   };
@@ -439,7 +508,6 @@ var merge = function merge(o1) {
 ```
 
 ## String
-
 
 ### append
 
@@ -451,7 +519,6 @@ var append = function append(a) {
 };
 ```
 
-
 ### prepend
 
 ```js
@@ -461,7 +528,6 @@ var prepend = function prepend(a) {
   };
 };
 ```
-
 
 ### test
 

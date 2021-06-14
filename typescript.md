@@ -2,33 +2,25 @@
 
 These are TypeScript utilities apt for transpilation into JavaScript. [For other versions and more information, check here.](./README.md)
 
-
 ## Array
-
 
 ### every
 
 ```ts
 const every = (p) => (list) => list.every(p);
-
 ```
-
 
 ### isIn
 
 ```ts
 const isIn = (list) => (obj) => list.some((a) => a === obj);
-
 ```
-
 
 ### some
 
 ```ts
 const some = (p) => (list) => list.some(p);
-
 ```
-
 
 ### uniq
 
@@ -39,11 +31,9 @@ const uniq = (list) => {
     seen.some((a) => a === item) ? false : (seen.push(item), true)
   );
 };
-
 ```
 
 ## Browser
-
 
 ### makeEl
 
@@ -59,9 +49,7 @@ const makeEl = (tag, attrs, ...children) => {
     .forEach((node) => el.appendChild(node));
   return el;
 };
-
 ```
-
 
 ### onLoad
 
@@ -70,27 +58,21 @@ const onLoad = (cb) =>
   /interactive|complete/.test(document.readyState)
     ? setTimeout(cb, 0)
     : document.addEventListener("DOMContentLoaded", cb, { once: true });
-
 ```
-
 
 ### sel
 
 ```ts
 const sel = document.querySelector.bind(document);
-
 ```
-
 
 ### selAll
 
 ```ts
 const selAll = document.querySelectorAll.bind(document);
-
 ```
 
 ## Function
-
 
 ### alternate
 
@@ -102,32 +84,28 @@ const alternate = (f, g) => {
     return state ? f(...args) : g(...args);
   };
 };
-
 ```
-
 
 ### apply
 
 ```ts
 const apply = (f) => (args) => f(...args);
-
 ```
-
 
 ### call
 
 ```ts
-const call = (f) =>
+const call =
+  (f) =>
   (...args) =>
     f(...args);
-
 ```
-
 
 ### callMethod
 
 ```ts
-const callMethod = <
+const callMethod =
+  <
     Key extends string | number | symbol,
     Arg,
     Res,
@@ -138,9 +116,7 @@ const callMethod = <
   ) =>
   (obj: Obj): Res =>
     args ? obj[method](...args) : obj[method]();
-
 ```
-
 
 ### counter
 
@@ -149,9 +125,7 @@ const counter = () => {
   let i = 0;
   return () => i++;
 };
-
 ```
-
 
 ### debounce
 
@@ -165,49 +139,42 @@ const debounce = <T>(secs: number, fn: (...args: Array<T>) => unknown) => {
     timeoutID = setTimeout(exec, delay, args);
   };
 };
-
 ```
-
 
 ### delay
 
 ```ts
 const delay = (secs) => (fn) => setTimeout(fn, secs * 1000);
-
 ```
-
 
 ### log
 
 ```ts
-const log = (...msg: any) =>
+const log =
+  (...msg: any) =>
   (arg?: any) => {
     console.log.apply(console, arg === undefined ? msg : [...msg, arg]);
     return arg;
   };
-
 ```
-
 
 ### partial
 
 ```ts
-const partial = (f, args1) =>
+const partial =
+  (f, args1) =>
   (...args2) =>
     f.apply(null, args1.concat(args2));
-
 ```
-
 
 ### partialR
 
 ```ts
-const partialR = (f, args1) =>
+const partialR =
+  (f, args1) =>
   (...args2) =>
     f.apply(null, args2.concat(args1));
-
 ```
-
 
 ### pipe
 
@@ -218,9 +185,7 @@ const pipe = (...fs) =>
       (...args) =>
         right(left(...args))
   );
-
 ```
-
 
 ### throttle
 
@@ -236,95 +201,74 @@ const throttle = <T>(secs: number, fn: (...args: Array<T>) => unknown) => {
     }
   };
 };
-
 ```
 
 ## Logic
 
-
 ### complement
 
 ```ts
-const complement = (f) =>
+const complement =
+  (f) =>
   (...args) =>
     !f(...args);
-
 ```
-
 
 ### eq
 
 ```ts
 const eq = (a) => (b) => b === a;
-
 ```
-
 
 ### gt
 
 ```ts
 const gt = (a) => (b) => b > a;
-
 ```
-
 
 ### gte
 
 ```ts
 const gte = (a) => (b) => b >= a;
-
 ```
-
 
 ### lt
 
 ```ts
 const lt = (a) => (b) => b < a;
-
 ```
-
 
 ### lte
 
 ```ts
 const lte = (a) => (b) => b <= a;
-
 ```
-
 
 ### not
 
 ```ts
 const not = (a) => !a;
-
 ```
-
 
 ### unless
 
 ```ts
 const unless = (pred) => (f) => (a) => pred(a) ? a : f(a);
-
 ```
-
 
 ### when
 
 ```ts
 const when = (pred) => (f) => (a) => pred(a) ? f(a) : a;
-
 ```
 
 ## Object
-
 
 ### get
 
 ```ts
 const get = (prop) => (obj) => obj[prop];
-
 ```
-
 
 ### merge
 
@@ -335,33 +279,26 @@ const merge = (o1) => (o2) => {
   Object.keys(o2).forEach((prop) => (r[prop] = o2[prop]));
   return r;
 };
-
 ```
 
 ## String
-
 
 ### append
 
 ```ts
 const append = (a) => (b) => b + a;
-
 ```
-
 
 ### prepend
 
 ```ts
 const prepend = (a) => (b) => a + b;
-
 ```
-
 
 ### test
 
 ```ts
 const test = (regex) => (text) => regex.test(text);
-
 ```
 
 ## Public domain license

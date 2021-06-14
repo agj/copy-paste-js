@@ -2,13 +2,19 @@ import glob from "glob-promise";
 import fs from "fs/promises";
 import babel from "@babel/core";
 import { groupBy, prop } from "ramda";
+import prettier from "prettier";
 
 const pathRegex = /utilities\/([^/]+)\/([^/]+)\//;
 const getGroup = (path: string) => path.match(pathRegex)?.[1] ?? "";
 const getName = (path: string) => path.match(pathRegex)?.[2] ?? "";
 const postprocessTs = (name: string, code: string) =>
-  code.replace("export default ", `const ${name} = `);
-const postprocessJs = (code: string) => code.replace(/"use strict";(\n)+/, "");
+  prettier.format(code.replace("export default ", `const ${name} = `), {
+    parser: "babel-ts",
+  });
+const postprocessJs = (code: string) =>
+  prettier.format(code.replace(/"use strict";(\n)+/, ""), { parser: "babel" });
+const postprocessMd = (md: string) =>
+  prettier.format(md, { parser: "markdown" });
 const fence = "```";
 
 const babelConfigModern = {
@@ -113,9 +119,15 @@ const splitUtilitiesByTarget = (utilities: Array<Utility>): SplitUtilities =>
 getUtilities()
   .then(splitUtilitiesByTarget)
   .then(async ({ legacy, modern, typescript }) => {
-    const compatibleMd = await utilitiesToMd("js", "compatible-js", legacy);
-    const modernMd = await utilitiesToMd("js", "modern-js", modern);
-    const typescriptMd = await utilitiesToMd("ts", "typescript", typescript);
+    const compatibleMd = postprocessMd(
+      await utilitiesToMd("js", "compatible-js", legacy)
+    );
+    const modernMd = postprocessMd(
+      await utilitiesToMd("js", "modern-js", modern)
+    );
+    const typescriptMd = postprocessMd(
+      await utilitiesToMd("ts", "typescript", typescript)
+    );
 
     fs.writeFile("../compatible-js.md", compatibleMd, "utf-8");
     fs.writeFile("../modern-js.md", modernMd, "utf-8");
