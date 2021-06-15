@@ -1,8 +1,8 @@
 import glob from "glob-promise";
 import fs from "fs/promises";
 import babel from "@babel/core";
-import { groupBy, prop } from "ramda";
 import prettier from "prettier";
+import { groupBy, prop, map } from "ramda";
 
 const pathRegex = /utilities\/([^/]+)\/([^/]+)\//;
 const getGroup = (path: string) => path.match(pathRegex)?.[1] ?? "";
@@ -21,7 +21,7 @@ const babelConfigModern = {
   filename: "index.ts",
   presets: ["@babel/preset-typescript", "modern-browsers"],
 } as any;
-const babelConfigLegacy = {
+const babelConfigCompatible = {
   filename: "index.ts",
   presets: ["@babel/preset-typescript", "@babel/preset-env"],
 } as any;
@@ -31,7 +31,7 @@ type Utility = {
   name: string;
   tsCode: string;
   jsCodeModern: string;
-  jsCodeLegacy: string;
+  jsCodeCompatible: string;
 };
 
 type UtilitySingleTarget = {
@@ -52,26 +52,35 @@ type TemplateName = "compatible-js" | "modern-js" | "typescript";
 
 const utilityPaths = await glob(`./utilities/*/*/index.ts`);
 
-const getUtilities = (): Promise<Array<Utility>> =>
-  Promise.all(
-    utilityPaths.map(async (path) => {
-      const name = getName(path);
-      const tsCode = postprocessTs(name, await fs.readFile(path, "utf-8"));
-      const jsCodeModern = postprocessJs(
-        babel.transformSync(tsCode, babelConfigModern).code
-      );
-      const jsCodeLegacy = postprocessJs(
-        babel.transformSync(tsCode, babelConfigLegacy).code
-      );
-      return {
-        group: getGroup(path),
-        name,
-        tsCode,
-        jsCodeModern,
-        jsCodeLegacy,
-      };
-    })
-  );
+const compatibleUtilityNames = (
+  await glob(`./utilities/*/*/compatible.js`)
+).map(getName);
+
+const allUtilities = await Promise.all(
+  utilityPaths.map(async (path) => {
+    const name = getName(path);
+    const group = getGroup(path);
+    const tsCode = postprocessTs(name, await fs.readFile(path, "utf-8"));
+    const jsCodeModern = postprocessJs(
+      babel.transformSync(tsCode, babelConfigModern).code
+    );
+    const jsCodeCompatible = postprocessJs(
+      compatibleUtilityNames.includes(name)
+        ? await fs.readFile(
+            `./utilities/${group}/${name}/compatible.js`,
+            "utf-8"
+          )
+        : babel.transformSync(tsCode, babelConfigCompatible).code
+    );
+    return {
+      group,
+      name,
+      tsCode,
+      jsCodeModern,
+      jsCodeCompatible,
+    };
+  })
+);
 
 const getTemplate = (name: TemplateName | "license") =>
   fs.readFile(`./templates/${name}.md`, "utf-8");
@@ -111,30 +120,26 @@ const splitUtilitiesByTarget = (utilities: Array<Utility>): SplitUtilities =>
   utilities.reduce(
     (
       { compatible, modern, typescript },
-      { group, name, tsCode, jsCodeModern, jsCodeLegacy }
+      { group, name, tsCode, jsCodeModern, jsCodeCompatible }
     ) => ({
-      compatible: [...compatible, { group, name, code: jsCodeLegacy }],
+      compatible: [...compatible, { group, name, code: jsCodeCompatible }],
       modern: [...modern, { group, name, code: jsCodeModern }],
       typescript: [...typescript, { group, name, code: tsCode }],
     }),
     { compatible: [], modern: [], typescript: [] }
   );
 
-getUtilities()
-  .then(splitUtilitiesByTarget)
-  .then(({ compatible, modern, typescript }) => {
-    const builds: Array<
-      [CodeFormat, TemplateName, Array<UtilitySingleTarget>]
-    > = [
-      ["js", "compatible-js", compatible],
-      ["js", "modern-js", modern],
-      ["ts", "typescript", typescript],
-    ];
+const { compatible, modern, typescript } = splitUtilitiesByTarget(allUtilities);
 
-    builds.forEach(async ([codeFormat, templateName, utilities]) => {
-      const md = postprocessMd(
-        await utilitiesToMd(codeFormat, templateName, utilities)
-      );
-      fs.writeFile(`../${templateName}.md`, md, "utf-8");
-    });
-  });
+const builds: Array<[CodeFormat, TemplateName, Array<UtilitySingleTarget>]> = [
+  ["js", "compatible-js", compatible],
+  ["js", "modern-js", modern],
+  ["ts", "typescript", typescript],
+];
+
+builds.forEach(async ([codeFormat, templateName, utilities]) => {
+  const md = postprocessMd(
+    await utilitiesToMd(codeFormat, templateName, utilities)
+  );
+  fs.writeFile(`../${templateName}.md`, md, "utf-8");
+});
