@@ -1,4 +1,8 @@
-export default (tag, attrs, ...children) => {
+export default (
+  tag: string,
+  attrs: Record<string, string>,
+  ...children: Array<HTMLElement | string>
+) => {
   const el = document.createElement(tag);
   if (attrs)
     Object.keys(attrs).forEach((attr) => el.setAttribute(attr, attrs[attr]));
