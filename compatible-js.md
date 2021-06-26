@@ -167,7 +167,7 @@ var counter = function counter() {
 ### debounce
 
 ```js
-var debounce = function debounce(secs, fn) {
+module.exports = function debounce(secs, fn) {
   var delay = secs * 1000;
   var timeoutID;
 
@@ -177,16 +177,7 @@ var debounce = function debounce(secs, fn) {
 
   return function () {
     clearTimeout(timeoutID);
-
-    for (
-      var _len = arguments.length, args = new Array(_len), _key = 0;
-      _key < _len;
-      _key++
-    ) {
-      args[_key] = arguments[_key];
-    }
-
-    timeoutID = setTimeout(exec, delay, args);
+    timeoutID = setTimeout(exec, delay, arguments);
   };
 };
 ```
