@@ -56,18 +56,30 @@ var uniq = function uniq(list) {
 ### makeEl
 
 ```js
-module.exports = function makeEl(tag, attrs) {
+var makeEl = function makeEl(tag, attrs) {
   var el = document.createElement(tag);
   if (attrs)
     Object.keys(attrs).forEach(function (attr) {
       return el.setAttribute(attr, attrs[attr]);
     });
-  for (var i = 2, len = arguments.length, child; i < len; i++) {
-    child = arguments[i];
-    el.appendChild(
-      typeof child === "string" ? document.createTextNode(child) : child
-    );
+
+  for (
+    var _len = arguments.length,
+      children = new Array(_len > 2 ? _len - 2 : 0),
+      _key = 2;
+    _key < _len;
+    _key++
+  ) {
+    children[_key - 2] = arguments[_key];
   }
+
+  children
+    .map(function (obj) {
+      return typeof obj === "string" ? document.createTextNode(obj) : obj;
+    })
+    .forEach(function (node) {
+      return el.appendChild(node);
+    });
   return el;
 };
 ```
@@ -126,9 +138,54 @@ var alternate = function alternate(f, g) {
 ### apply
 
 ```js
-module.exports = function apply(f) {
+function _toConsumableArray(arr) {
+  return (
+    _arrayWithoutHoles(arr) ||
+    _iterableToArray(arr) ||
+    _unsupportedIterableToArray(arr) ||
+    _nonIterableSpread()
+  );
+}
+
+function _nonIterableSpread() {
+  throw new TypeError(
+    "Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."
+  );
+}
+
+function _unsupportedIterableToArray(o, minLen) {
+  if (!o) return;
+  if (typeof o === "string") return _arrayLikeToArray(o, minLen);
+  var n = Object.prototype.toString.call(o).slice(8, -1);
+  if (n === "Object" && o.constructor) n = o.constructor.name;
+  if (n === "Map" || n === "Set") return Array.from(o);
+  if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n))
+    return _arrayLikeToArray(o, minLen);
+}
+
+function _iterableToArray(iter) {
+  if (
+    (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null) ||
+    iter["@@iterator"] != null
+  )
+    return Array.from(iter);
+}
+
+function _arrayWithoutHoles(arr) {
+  if (Array.isArray(arr)) return _arrayLikeToArray(arr);
+}
+
+function _arrayLikeToArray(arr, len) {
+  if (len == null || len > arr.length) len = arr.length;
+  for (var i = 0, arr2 = new Array(len); i < len; i++) {
+    arr2[i] = arr[i];
+  }
+  return arr2;
+}
+
+var apply = function apply(f) {
   return function (args) {
-    return f.apply(void 0, args);
+    return f.apply(void 0, _toConsumableArray(args));
   };
 };
 ```
@@ -146,9 +203,56 @@ var call = function call(f) {
 ### callMethod
 
 ```js
-module.exports = function callMethod(method, args) {
+function _toConsumableArray(arr) {
+  return (
+    _arrayWithoutHoles(arr) ||
+    _iterableToArray(arr) ||
+    _unsupportedIterableToArray(arr) ||
+    _nonIterableSpread()
+  );
+}
+
+function _nonIterableSpread() {
+  throw new TypeError(
+    "Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."
+  );
+}
+
+function _unsupportedIterableToArray(o, minLen) {
+  if (!o) return;
+  if (typeof o === "string") return _arrayLikeToArray(o, minLen);
+  var n = Object.prototype.toString.call(o).slice(8, -1);
+  if (n === "Object" && o.constructor) n = o.constructor.name;
+  if (n === "Map" || n === "Set") return Array.from(o);
+  if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n))
+    return _arrayLikeToArray(o, minLen);
+}
+
+function _iterableToArray(iter) {
+  if (
+    (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null) ||
+    iter["@@iterator"] != null
+  )
+    return Array.from(iter);
+}
+
+function _arrayWithoutHoles(arr) {
+  if (Array.isArray(arr)) return _arrayLikeToArray(arr);
+}
+
+function _arrayLikeToArray(arr, len) {
+  if (len == null || len > arr.length) len = arr.length;
+  for (var i = 0, arr2 = new Array(len); i < len; i++) {
+    arr2[i] = arr[i];
+  }
+  return arr2;
+}
+
+var callMethod = function callMethod(method, args) {
   return function (obj) {
-    return args ? obj[method].apply(obj, args) : obj[method]();
+    return args
+      ? obj[method].apply(obj, _toConsumableArray(args))
+      : obj[method]();
   };
 };
 ```
@@ -167,7 +271,7 @@ var counter = function counter() {
 ### debounce
 
 ```js
-module.exports = function debounce(secs, fn) {
+var debounce = function debounce(secs, fn) {
   var delay = secs * 1000;
   var timeoutID;
 
@@ -177,7 +281,16 @@ module.exports = function debounce(secs, fn) {
 
   return function () {
     clearTimeout(timeoutID);
-    timeoutID = setTimeout(exec, delay, arguments);
+
+    for (
+      var _len = arguments.length, args = new Array(_len), _key = 0;
+      _key < _len;
+      _key++
+    ) {
+      args[_key] = arguments[_key];
+    }
+
+    timeoutID = setTimeout(exec, delay, args);
   };
 };
 ```

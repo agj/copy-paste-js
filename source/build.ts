@@ -54,9 +54,10 @@ const fence = "```";
 
 const utilityPaths = await glob(`./utilities/*/*/index.ts`);
 
-const compatibleUtilityNames = (
-  await glob(`./utilities/*/*/compatible.js`)
-).map(getName);
+// const compatibleUtilityNames = (
+//   await glob(`./utilities/*/*/compatible.js`)
+// ).map(getName);
+const compatibleUtilityNames = [];
 
 const allUtilities: Array<Utility> = await Promise.all(
   utilityPaths.map(async (path) => {
