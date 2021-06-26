@@ -38,7 +38,11 @@ const uniq = (list) => {
 ### makeEl
 
 ```ts
-const makeEl = (tag, attrs, ...children) => {
+const makeEl = (
+  tag: string,
+  attrs: Record<string, string>,
+  ...children: Array<HTMLElement | string>
+) => {
   const el = document.createElement(tag);
   if (attrs)
     Object.keys(attrs).forEach((attr) => el.setAttribute(attr, attrs[attr]));
@@ -51,10 +55,20 @@ const makeEl = (tag, attrs, ...children) => {
 };
 ```
 
+### onChanged
+
+```ts
+const onChanged = (el: HTMLElement, cb: MutationCallback): (() => void) => {
+  const observer = new MutationObserver(cb);
+  observer.observe(el, { childList: true, subtree: true });
+  return observer.disconnect.bind(observer);
+};
+```
+
 ### onLoad
 
 ```ts
-const onLoad = (cb) =>
+const onLoad = (cb: () => any) =>
   /interactive|complete/.test(document.readyState)
     ? setTimeout(cb, 0)
     : document.addEventListener("DOMContentLoaded", cb, { once: true });

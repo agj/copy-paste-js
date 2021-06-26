@@ -72,6 +72,19 @@ module.exports = function makeEl(tag, attrs) {
 };
 ```
 
+### onChanged
+
+```js
+var onChanged = function onChanged(el, cb) {
+  var observer = new MutationObserver(cb);
+  observer.observe(el, {
+    childList: true,
+    subtree: true,
+  });
+  return observer.disconnect.bind(observer);
+};
+```
+
 ### onLoad
 
 ```js

@@ -51,6 +51,19 @@ const makeEl = (tag, attrs, ...children) => {
 };
 ```
 
+### onChanged
+
+```js
+const onChanged = (el, cb) => {
+  const observer = new MutationObserver(cb);
+  observer.observe(el, {
+    childList: true,
+    subtree: true,
+  });
+  return observer.disconnect.bind(observer);
+};
+```
+
 ### onLoad
 
 ```js
