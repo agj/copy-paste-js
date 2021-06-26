@@ -126,7 +126,7 @@ var alternate = function alternate(f, g) {
 ### apply
 
 ```js
-module.exports = function apply(f) {
+var apply = function apply(f) {
   return function (args) {
     return f.apply(void 0, args);
   };
@@ -146,7 +146,7 @@ var call = function call(f) {
 ### callMethod
 
 ```js
-module.exports = function callMethod(method, args) {
+var callMethod = function callMethod(method, args) {
   return function (obj) {
     return args ? obj[method].apply(obj, args) : obj[method]();
   };

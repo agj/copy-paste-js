@@ -13,6 +13,19 @@ const babelConfigModern = {
 const babelConfigCompatible = {
   filename: "index.ts",
   presets: ["@babel/preset-typescript", "@babel/preset-env"],
+  assumptions: {
+    ignoreFunctionLength: true,
+    ignoreToPrimitiveHint: true,
+    iterableIsArray: true,
+    mutableTemplateObject: true,
+    noDocumentAll: true,
+    noNewArrows: true,
+    objectRestNoSymbols: true,
+    pureGetters: true,
+    setComputedProperties: true,
+    setSpreadProperties: true,
+    skipForOfIteratorClosing: true,
+  },
 } as any;
 
 // Types
@@ -57,6 +70,7 @@ const utilityPaths = await glob(`./utilities/*/*/index.ts`);
 const compatibleUtilityNames = (
   await glob(`./utilities/*/*/compatible.js`)
 ).map(getName);
+// const compatibleUtilityNames = [];
 
 const allUtilities: Array<Utility> = await Promise.all(
   utilityPaths.map(async (path) => {
