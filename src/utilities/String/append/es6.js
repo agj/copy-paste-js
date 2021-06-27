@@ -1,1 +1,0 @@
-const append = a => b => b + a;

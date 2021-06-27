@@ -1,1 +1,0 @@
-const not = a => !a;

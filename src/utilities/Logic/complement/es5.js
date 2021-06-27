@@ -1,1 +1,0 @@
-var complement = function (f) { return function () { return !f.apply(undefined, arguments) } };

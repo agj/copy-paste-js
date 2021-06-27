@@ -1,1 +1,0 @@
-const selAll = document.querySelectorAll.bind(document);

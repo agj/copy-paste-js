@@ -1,1 +1,0 @@
-var not = function (a) { return !a };

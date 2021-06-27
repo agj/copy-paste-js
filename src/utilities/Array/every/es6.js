@@ -1,1 +1,0 @@
-const every = p => list => list.every(p);

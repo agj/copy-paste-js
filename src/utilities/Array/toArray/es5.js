@@ -1,1 +1,0 @@
-var toArray = Function.prototype.call.bind([].slice);

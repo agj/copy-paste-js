@@ -1,1 +1,0 @@
-const test = regex => text => regex.test(text);

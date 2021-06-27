@@ -1,1 +1,0 @@
-var delay = function (secs) { return function (fn) { setTimeout(fn, secs * 1000) } };

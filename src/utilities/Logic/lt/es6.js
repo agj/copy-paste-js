@@ -1,1 +1,0 @@
-const lt = a => b => b < a;

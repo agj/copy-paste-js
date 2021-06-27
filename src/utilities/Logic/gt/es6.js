@@ -1,1 +1,0 @@
-const gt = a => b => b > a;
