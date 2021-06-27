@@ -144,6 +144,28 @@ const allUtilities: Array<Utility> = await Promise.all(
 
 const license = await getTemplate("license");
 
+const utilityToContentsItemMd = ({ name }: UtilitySingleTarget): string =>
+  `  - [${name}](#${name.toLowerCase()})`;
+
+const utilitiesToContentsMd = (
+  utilities: Array<UtilitySingleTarget>
+): string => {
+  const grouped = groupBy(prop("group"), utilities);
+
+  const groupsList = Object.keys(grouped)
+    .map(
+      (group) =>
+        `- [${group}](#${group.toLowerCase()})\n` +
+        grouped[group].map(utilityToContentsItemMd).join("\n")
+    )
+    .join("\n");
+
+  return `
+## Contents
+
+${groupsList}`;
+};
+
 const utilityToMd =
   (codeFormat: string) =>
   ({ name, code, readme }: UtilitySingleTarget): string =>
@@ -155,25 +177,6 @@ ${readme ?? ""}
 ${fence}${codeFormat}
 ${code}
 ${fence}`;
-
-const utilitiesToContentsMd = (
-  utilities: Array<UtilitySingleTarget>
-): string => {
-  const grouped = groupBy(prop("group"), utilities);
-  const groupsList = Object.keys(grouped)
-    .map((group) => {
-      const utilitiesList = grouped[group]
-        .map(({ name }) => `  - [${name}](#${name.toLowerCase()})`)
-        .join("\n");
-      return `- [${group}](#${group.toLowerCase()})\n${utilitiesList}`;
-    })
-    .join("\n");
-  return `
-## Contents
-
-${groupsList}
-`;
-};
 
 const utilitiesToMd = async (
   codeFormat: CodeFormat,
