@@ -4,25 +4,25 @@ These are utilities that adhere to the ECMAScript 2015 standard, to use in relat
 
 ## Array
 
-### every
+### `every`
 
 ```js
 const every = (p) => (list) => list.every(p);
 ```
 
-### isIn
+### `isIn`
 
 ```js
 const isIn = (list) => (obj) => list.some((a) => a === obj);
 ```
 
-### some
+### `some`
 
 ```js
 const some = (p) => (list) => list.some(p);
 ```
 
-### uniq
+### `uniq`
 
 ```js
 const uniq = (list) => {
@@ -33,7 +33,7 @@ const uniq = (list) => {
 };
 ```
 
-### zip
+### `zip`
 
 ```js
 const zip = (right) => (left) => left.map((l, i) => [l, right[i]]);
@@ -41,7 +41,9 @@ const zip = (right) => (left) => left.map((l, i) => [l, right[i]]);
 
 ## Browser
 
-### makeEl
+### `makeEl`
+
+Creates an element with the supplied tag name, attributes (defined in an object), and children. Can be used nested to create a tree.
 
 ```js
 const makeEl = (tag, attrs, ...children) => {
@@ -57,7 +59,7 @@ const makeEl = (tag, attrs, ...children) => {
 };
 ```
 
-### onChanged
+### `onChanged`
 
 ```js
 const onChanged = (el, cb) => {
@@ -70,7 +72,9 @@ const onChanged = (el, cb) => {
 };
 ```
 
-### onLoad
+### `onLoad`
+
+Executes the supplied function as soon as the DOM is ready.
 
 ```js
 const onLoad = (cb) =>
@@ -81,13 +85,17 @@ const onLoad = (cb) =>
       });
 ```
 
-### sel
+### `sel`
+
+Returns the first element in the document that matches the given a CSS selector.
 
 ```js
 const sel = document.querySelector.bind(document);
 ```
 
-### selAll
+### `selAll`
+
+Returns a list of all elements that match the provided CSS selector.
 
 ```js
 const selAll = document.querySelectorAll.bind(document);
@@ -95,7 +103,9 @@ const selAll = document.querySelectorAll.bind(document);
 
 ## Function
 
-### alternate
+### `alternate`
+
+Alternately executes functions `f` and `g` upon each call.
 
 ```js
 const alternate = (f, g) => {
@@ -107,13 +117,17 @@ const alternate = (f, g) => {
 };
 ```
 
-### apply
+### `apply`
+
+Returns a function that will take an array of arguments to call function `f` with.
 
 ```js
 const apply = (f) => (args) => f(...args);
 ```
 
-### call
+### `call`
+
+Returns a function that will call function `f` with any arguments supplied.
 
 ```js
 const call =
@@ -122,14 +136,18 @@ const call =
     f(...args);
 ```
 
-### callMethod
+### `callMethod`
+
+Takes a method name `method` and a list of arguments `args`, and returns a function that upon execution will take an object `obj` and call whatever method `method` in it with arguments `args`.
 
 ```js
 const callMethod = (method, args) => (obj) =>
   args ? obj[method](...args) : obj[method]();
 ```
 
-### counter
+### `counter`
+
+Returns a function that upon each execution will return a number that is 1 greater than the last time, starting with 0.
 
 ```js
 const counter = () => {
@@ -138,7 +156,9 @@ const counter = () => {
 };
 ```
 
-### debounce
+### `debounce`
+
+Takes a delay in seconds `secs` and a function `fn`, and returns a function that calls `fn` only after `secs` have passed without having been invoked. Useful, for instance, to make sure repeated changes executed in a small space of time don't cause too many expensive computations, and only when done perform a calculation.
 
 ```js
 const debounce = (secs, fn) => {
@@ -152,13 +172,17 @@ const debounce = (secs, fn) => {
 };
 ```
 
-### delay
+### `delay`
+
+Takes a delay in seconds `secs`, and returns a function that takes any function `fn` and executes it only after `secs` have elapsed.
 
 ```js
 const delay = (secs) => (fn) => setTimeout(fn, secs * 1000);
 ```
 
-### log
+### `log`
+
+Takes a list of arguments `msg`, and returns a function that takes one argument `arg`, which it returns after logging `msg` and `arg` in the console.
 
 ```js
 const log =
@@ -169,7 +193,9 @@ const log =
   };
 ```
 
-### partial
+### `partial`
+
+Takes a function `f` and a list of arguments `args1`, and returns a function that will invoke `f` with `args1` plus any other arguments passed to it.
 
 ```js
 const partial =
@@ -178,7 +204,9 @@ const partial =
     f.apply(null, args1.concat(args2));
 ```
 
-### partialR
+### `partialR`
+
+Takes a function `f` and a list of arguments `args1`, and returns a function that will invoke `f` with any arguments passed to it plus `args1` to its right.
 
 ```js
 const partialR =
@@ -187,7 +215,9 @@ const partialR =
     f.apply(null, args2.concat(args1));
 ```
 
-### pipe
+### `pipe`
+
+Takes any number of functions, and returns a function that will execute them from left to right, passing the return value of one as the input to the next.
 
 ```js
 const pipe = (...fs) =>
@@ -198,7 +228,9 @@ const pipe = (...fs) =>
   );
 ```
 
-### throttle
+### `throttle`
+
+Takes a delay `secs` and a function `fn`, and returns a function that will call `fn` once and ignore all subsequent calls until `secs` have elapsed.
 
 ```js
 const throttle = (secs, fn) => {
@@ -216,7 +248,9 @@ const throttle = (secs, fn) => {
 
 ## Logic
 
-### complement
+### `complement`
+
+Takes a function `f` and returns a function that returns the boolean opposite of the value that `f` would return for the same arguments.
 
 ```js
 const complement =
@@ -225,49 +259,65 @@ const complement =
     !f(...args);
 ```
 
-### eq
+### `eq`
+
+Takes a value `a`, and returns a function that returns whether argument `b` is strictly equal to `a`.
 
 ```js
 const eq = (a) => (b) => b === a;
 ```
 
-### gt
+### `gt`
+
+Takes a value `a`, and returns a function that returns whether argument `b` is greater than `a`.
 
 ```js
 const gt = (a) => (b) => b > a;
 ```
 
-### gte
+### `gte`
+
+Takes a value `a`, and returns a function that returns whether argument `b` is greater than or equal to `a`.
 
 ```js
 const gte = (a) => (b) => b >= a;
 ```
 
-### lt
+### `lt`
+
+Takes a value `a`, and returns a function that returns whether argument `b` is less than `a`.
 
 ```js
 const lt = (a) => (b) => b < a;
 ```
 
-### lte
+### `lte`
+
+Takes a value `a`, and returns a function that returns whether argument `b` is less than or equal to `a`.
 
 ```js
 const lte = (a) => (b) => b <= a;
 ```
 
-### not
+### `not`
+
+Returns the boolean opposite of the argument passed.
 
 ```js
 const not = (a) => !a;
 ```
 
-### unless
+### `unless`
+
+If predicate function `pred` returns a **falsy** value when passed `a`, the return value will be `f(a)`, otherwise `a`.
 
 ```js
 const unless = (pred) => (f) => (a) => pred(a) ? a : f(a);
 ```
 
-### when
+### `when`
+
+If predicate function `pred` returns a **truthy** value when passed `a`, the return value will be `f(a)`, otherwise `a`.
 
 ```js
 const when = (pred) => (f) => (a) => pred(a) ? f(a) : a;
@@ -275,13 +325,13 @@ const when = (pred) => (f) => (a) => pred(a) ? f(a) : a;
 
 ## Object
 
-### get
+### `get`
 
 ```js
 const get = (prop) => (obj) => obj[prop];
 ```
 
-### merge
+### `merge`
 
 ```js
 const merge = (o1) => (o2) => {
@@ -294,19 +344,19 @@ const merge = (o1) => (o2) => {
 
 ## String
 
-### append
+### `append`
 
 ```js
 const append = (right) => (left) => left + right;
 ```
 
-### prepend
+### `prepend`
 
 ```js
 const prepend = (left) => (right) => left + right;
 ```
 
-### test
+### `test`
 
 ```js
 const test = (regex) => (text) => regex.test(text);

@@ -4,25 +4,25 @@ These are TypeScript utilities apt for transpilation into JavaScript. [For other
 
 ## Array
 
-### every
+### `every`
 
 ```ts
 const every = (p) => (list) => list.every(p);
 ```
 
-### isIn
+### `isIn`
 
 ```ts
 const isIn = (list) => (obj) => list.some((a) => a === obj);
 ```
 
-### some
+### `some`
 
 ```ts
 const some = (p) => (list) => list.some(p);
 ```
 
-### uniq
+### `uniq`
 
 ```ts
 const uniq = (list) => {
@@ -33,7 +33,7 @@ const uniq = (list) => {
 };
 ```
 
-### zip
+### `zip`
 
 ```ts
 const zip =
@@ -44,7 +44,9 @@ const zip =
 
 ## Browser
 
-### makeEl
+### `makeEl`
+
+Creates an element with the supplied tag name, attributes (defined in an object), and children. Can be used nested to create a tree.
 
 ```ts
 const makeEl = (
@@ -64,7 +66,7 @@ const makeEl = (
 };
 ```
 
-### onChanged
+### `onChanged`
 
 ```ts
 const onChanged = (el: HTMLElement, cb: MutationCallback): (() => void) => {
@@ -74,7 +76,9 @@ const onChanged = (el: HTMLElement, cb: MutationCallback): (() => void) => {
 };
 ```
 
-### onLoad
+### `onLoad`
+
+Executes the supplied function as soon as the DOM is ready.
 
 ```ts
 const onLoad = (cb: () => any) =>
@@ -83,13 +87,17 @@ const onLoad = (cb: () => any) =>
     : document.addEventListener("DOMContentLoaded", cb, { once: true });
 ```
 
-### sel
+### `sel`
+
+Returns the first element in the document that matches the given a CSS selector.
 
 ```ts
 const sel = document.querySelector.bind(document);
 ```
 
-### selAll
+### `selAll`
+
+Returns a list of all elements that match the provided CSS selector.
 
 ```ts
 const selAll = document.querySelectorAll.bind(document);
@@ -97,7 +105,9 @@ const selAll = document.querySelectorAll.bind(document);
 
 ## Function
 
-### alternate
+### `alternate`
+
+Alternately executes functions `f` and `g` upon each call.
 
 ```ts
 const alternate = (f, g) => {
@@ -109,13 +119,17 @@ const alternate = (f, g) => {
 };
 ```
 
-### apply
+### `apply`
+
+Returns a function that will take an array of arguments to call function `f` with.
 
 ```ts
 const apply = (f) => (args) => f(...args);
 ```
 
-### call
+### `call`
+
+Returns a function that will call function `f` with any arguments supplied.
 
 ```ts
 const call =
@@ -124,7 +138,9 @@ const call =
     f(...args);
 ```
 
-### callMethod
+### `callMethod`
+
+Takes a method name `method` and a list of arguments `args`, and returns a function that upon execution will take an object `obj` and call whatever method `method` in it with arguments `args`.
 
 ```ts
 const callMethod =
@@ -141,7 +157,9 @@ const callMethod =
     args ? obj[method](...args) : obj[method]();
 ```
 
-### counter
+### `counter`
+
+Returns a function that upon each execution will return a number that is 1 greater than the last time, starting with 0.
 
 ```ts
 const counter = () => {
@@ -150,7 +168,9 @@ const counter = () => {
 };
 ```
 
-### debounce
+### `debounce`
+
+Takes a delay in seconds `secs` and a function `fn`, and returns a function that calls `fn` only after `secs` have passed without having been invoked. Useful, for instance, to make sure repeated changes executed in a small space of time don't cause too many expensive computations, and only when done perform a calculation.
 
 ```ts
 const debounce = <T>(secs: number, fn: (...args: Array<T>) => unknown) => {
@@ -164,13 +184,17 @@ const debounce = <T>(secs: number, fn: (...args: Array<T>) => unknown) => {
 };
 ```
 
-### delay
+### `delay`
+
+Takes a delay in seconds `secs`, and returns a function that takes any function `fn` and executes it only after `secs` have elapsed.
 
 ```ts
 const delay = (secs) => (fn) => setTimeout(fn, secs * 1000);
 ```
 
-### log
+### `log`
+
+Takes a list of arguments `msg`, and returns a function that takes one argument `arg`, which it returns after logging `msg` and `arg` in the console.
 
 ```ts
 const log =
@@ -181,7 +205,9 @@ const log =
   };
 ```
 
-### partial
+### `partial`
+
+Takes a function `f` and a list of arguments `args1`, and returns a function that will invoke `f` with `args1` plus any other arguments passed to it.
 
 ```ts
 const partial =
@@ -190,7 +216,9 @@ const partial =
     f.apply(null, args1.concat(args2));
 ```
 
-### partialR
+### `partialR`
+
+Takes a function `f` and a list of arguments `args1`, and returns a function that will invoke `f` with any arguments passed to it plus `args1` to its right.
 
 ```ts
 const partialR =
@@ -199,7 +227,9 @@ const partialR =
     f.apply(null, args2.concat(args1));
 ```
 
-### pipe
+### `pipe`
+
+Takes any number of functions, and returns a function that will execute them from left to right, passing the return value of one as the input to the next.
 
 ```ts
 const pipe = (...fs) =>
@@ -210,7 +240,9 @@ const pipe = (...fs) =>
   );
 ```
 
-### throttle
+### `throttle`
+
+Takes a delay `secs` and a function `fn`, and returns a function that will call `fn` once and ignore all subsequent calls until `secs` have elapsed.
 
 ```ts
 const throttle = <T>(secs: number, fn: (...args: Array<T>) => unknown) => {
@@ -228,7 +260,9 @@ const throttle = <T>(secs: number, fn: (...args: Array<T>) => unknown) => {
 
 ## Logic
 
-### complement
+### `complement`
+
+Takes a function `f` and returns a function that returns the boolean opposite of the value that `f` would return for the same arguments.
 
 ```ts
 const complement =
@@ -237,49 +271,65 @@ const complement =
     !f(...args);
 ```
 
-### eq
+### `eq`
+
+Takes a value `a`, and returns a function that returns whether argument `b` is strictly equal to `a`.
 
 ```ts
 const eq = (a) => (b) => b === a;
 ```
 
-### gt
+### `gt`
+
+Takes a value `a`, and returns a function that returns whether argument `b` is greater than `a`.
 
 ```ts
 const gt = (a) => (b) => b > a;
 ```
 
-### gte
+### `gte`
+
+Takes a value `a`, and returns a function that returns whether argument `b` is greater than or equal to `a`.
 
 ```ts
 const gte = (a) => (b) => b >= a;
 ```
 
-### lt
+### `lt`
+
+Takes a value `a`, and returns a function that returns whether argument `b` is less than `a`.
 
 ```ts
 const lt = (a) => (b) => b < a;
 ```
 
-### lte
+### `lte`
+
+Takes a value `a`, and returns a function that returns whether argument `b` is less than or equal to `a`.
 
 ```ts
 const lte = (a) => (b) => b <= a;
 ```
 
-### not
+### `not`
+
+Returns the boolean opposite of the argument passed.
 
 ```ts
 const not = (a) => !a;
 ```
 
-### unless
+### `unless`
+
+If predicate function `pred` returns a **falsy** value when passed `a`, the return value will be `f(a)`, otherwise `a`.
 
 ```ts
 const unless = (pred) => (f) => (a) => pred(a) ? a : f(a);
 ```
 
-### when
+### `when`
+
+If predicate function `pred` returns a **truthy** value when passed `a`, the return value will be `f(a)`, otherwise `a`.
 
 ```ts
 const when = (pred) => (f) => (a) => pred(a) ? f(a) : a;
@@ -287,13 +337,13 @@ const when = (pred) => (f) => (a) => pred(a) ? f(a) : a;
 
 ## Object
 
-### get
+### `get`
 
 ```ts
 const get = (prop) => (obj) => obj[prop];
 ```
 
-### merge
+### `merge`
 
 ```ts
 const merge = (o1) => (o2) => {
@@ -306,19 +356,19 @@ const merge = (o1) => (o2) => {
 
 ## String
 
-### append
+### `append`
 
 ```ts
 const append = (right) => (left) => left + right;
 ```
 
-### prepend
+### `prepend`
 
 ```ts
 const prepend = (left) => (right) => left + right;
 ```
 
-### test
+### `test`
 
 ```ts
 const test = (regex) => (text) => regex.test(text);

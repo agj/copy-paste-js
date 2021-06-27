@@ -31,17 +31,19 @@ const babelConfigCompatible = {
 // Types
 
 type Utility = {
-  group: string;
   name: string;
+  group: string;
   tsCode: string;
   jsCodeModern: string;
   jsCodeCompatible: string;
+  readme: string | null;
 };
 
 type UtilitySingleTarget = {
-  group: string;
   name: string;
+  group: string;
   code: string;
+  readme: string | null;
 };
 
 type CodeFormat = "js" | "ts";
@@ -53,6 +55,34 @@ type TemplateName = "compatible-js" | "modern-js" | "typescript";
 const pathRegex = /utilities\/([^/]+)\/([^/]+)\//;
 const getGroup = (path: string) => path.match(pathRegex)?.[1] ?? "";
 const getName = (path: string) => path.match(pathRegex)?.[2] ?? "";
+const getUtilityPath = (name: string, group: string) =>
+  `./utilities/${group}/${name}/`;
+const fence = "```";
+
+const getUtilityFile = async (
+  fileName: string,
+  name: string,
+  group: string
+): Promise<string | null> => {
+  try {
+    const result = await fs.readFile(
+      getUtilityPath(name, group) + fileName,
+      "utf-8"
+    );
+    return result;
+  } catch (e) {
+    return null;
+  }
+};
+const getTypescript = (name: string, group: string) =>
+  getUtilityFile("index.ts", name, group);
+const getCompatible = (name: string, group: string) =>
+  getUtilityFile("compatible.js", name, group);
+const getReadme = (name: string, group: string) =>
+  getUtilityFile("readme.md", name, group);
+const getTemplate = (name: TemplateName | "license") =>
+  fs.readFile(`./templates/${name}.md`, "utf-8");
+
 const postprocessTs = (name: string, code: string) =>
   prettier.format(code.replace("export default ", `const ${name} = `), {
     parser: "babel-ts",
@@ -64,53 +94,48 @@ const postprocessJs = (code: string) =>
   );
 const postprocessMd = (md: string) =>
   prettier.format(md, { parser: "markdown" });
-const fence = "```";
 
 // Get utilities
 
-const utilityPaths = await glob(`./utilities/*/*/index.ts`);
-
-const compatibleUtilityNames = (
-  await glob(`./utilities/*/*/compatible.js`)
-).map(getName);
-// const compatibleUtilityNames = [];
+const utilityPaths = await glob(`./utilities/*/*/`);
 
 const allUtilities: Array<Utility> = await Promise.all(
   utilityPaths.map(async (path) => {
     const name = getName(path);
     const group = getGroup(path);
-    const tsCode = postprocessTs(name, await fs.readFile(path, "utf-8"));
+
+    const tsCode = postprocessTs(name, await getTypescript(name, group));
     const jsCodeModern = postprocessJs(
       babel.transformSync(tsCode, babelConfigModern).code
     );
     const jsCodeCompatible = postprocessJs(
-      compatibleUtilityNames.includes(name)
-        ? await fs.readFile(
-            `./utilities/${group}/${name}/compatible.js`,
-            "utf-8"
-          )
-        : babel.transformSync(tsCode, babelConfigCompatible).code
+      (await getCompatible(name, group)) ??
+        babel.transformSync(tsCode, babelConfigCompatible).code
     );
+    const readme = await getReadme(name, group);
+
     return {
-      group,
       name,
+      group,
       tsCode,
       jsCodeModern,
       jsCodeCompatible,
+      readme,
     };
   })
 );
 
 // Markdown generation
 
-const getTemplate = (name: TemplateName | "license") =>
-  fs.readFile(`./templates/${name}.md`, "utf-8");
+const license = await getTemplate("license");
 
 const utilityToMd =
   (codeFormat: string) =>
-  ({ name, code }: UtilitySingleTarget) =>
+  ({ name, code, readme }: UtilitySingleTarget) =>
     `
-### ${name}
+### \`${name}\`
+
+${readme ?? ""}
 
 ${fence}${codeFormat}
 ${code}
@@ -122,7 +147,6 @@ const utilitiesToMd = async (
   utilities: Array<UtilitySingleTarget>
 ) => {
   const template = await getTemplate(templateName);
-  const license = await getTemplate("license");
 
   const grouped = groupBy(prop("group"), utilities);
 
@@ -137,19 +161,24 @@ const utilitiesToMd = async (
   return template + "\n\n" + utilitiesMd + "\n\n" + license;
 };
 
+// Splitting into targets
+
 const { compatible, modern, typescript } = allUtilities.reduce(
   (
     { compatible, modern, typescript },
-    { group, name, tsCode, jsCodeModern, jsCodeCompatible }
+    { group, name, tsCode, jsCodeModern, jsCodeCompatible, readme }
   ) => ({
-    compatible: [...compatible, { group, name, code: jsCodeCompatible }],
-    modern: [...modern, { group, name, code: jsCodeModern }],
-    typescript: [...typescript, { group, name, code: tsCode }],
+    compatible: [
+      ...compatible,
+      { group, name, code: jsCodeCompatible, readme: readme },
+    ],
+    modern: [...modern, { group, name, code: jsCodeModern, readme }],
+    typescript: [...typescript, { group, name, code: tsCode, readme }],
   }),
   { compatible: [], modern: [], typescript: [] }
 );
 
-// Build files
+// Building files
 
 const builds: Array<[CodeFormat, TemplateName, Array<UtilitySingleTarget>]> = [
   ["js", "compatible-js", compatible],
