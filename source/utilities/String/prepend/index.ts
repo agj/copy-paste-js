@@ -1,1 +1,1 @@
-export default (a) => (b) => a + b;
+export default (left) => (right) => left + right;

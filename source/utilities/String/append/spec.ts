@@ -1,9 +1,13 @@
 import append from "./";
 
-describe("append", () => {
-  test("test", async () => {
-    expect.assertions(1);
+import { testProp, fc } from "jest-fast-check";
 
-    expect(append("after")("before")).toBe("beforeafter");
-  });
+describe("append", () => {
+  testProp(
+    "given two strings returns them concatenated in the right order",
+    [fc.string(), fc.string()],
+    async (left, right) => {
+      expect(append(right)(left)).toBe(left + right);
+    }
+  );
 });
