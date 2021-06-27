@@ -1,6 +1,7 @@
 import callMethod from "./";
 
 import { testProp, fc } from "jest-fast-check";
+import { fcFilledArray } from "../../../test-utils";
 
 describe("callMethod", () => {
   testProp(
@@ -35,17 +36,7 @@ describe("callMethod", () => {
 
   testProp(
     "creates a function that passes all of its received arguments to the method",
-    [
-      fc.array(
-        fc.oneof(
-          fc.integer(),
-          fc.float(),
-          fc.string(),
-          fc.boolean(),
-          fc.dictionary(fc.string(), fc.float())
-        )
-      ),
-    ],
+    [fcFilledArray],
     async (args) => {
       const spy = jest.fn();
       const object = {
