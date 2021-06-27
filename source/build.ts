@@ -146,7 +146,7 @@ const license = await getTemplate("license");
 
 const utilityToMd =
   (codeFormat: string) =>
-  ({ name, code, readme }: UtilitySingleTarget) =>
+  ({ name, code, readme }: UtilitySingleTarget): string =>
     `
 ### \`${name}\`
 
@@ -156,12 +156,32 @@ ${fence}${codeFormat}
 ${code}
 ${fence}`;
 
+const utilitiesToContentsMd = (
+  utilities: Array<UtilitySingleTarget>
+): string => {
+  const grouped = groupBy(prop("group"), utilities);
+  const groupsList = Object.keys(grouped)
+    .map((group) => {
+      const utilitiesList = grouped[group]
+        .map(({ name }) => `  - [${name}](#${name.toLowerCase()})`)
+        .join("\n");
+      return `- [${group}](#${group.toLowerCase()})\n${utilitiesList}`;
+    })
+    .join("\n");
+  return `
+## Contents
+
+${groupsList}
+`;
+};
+
 const utilitiesToMd = async (
   codeFormat: CodeFormat,
   templateName: TemplateName,
   utilities: Array<UtilitySingleTarget>
-) => {
+): Promise<string> => {
   const template = await getTemplate(templateName);
+  const contents = utilitiesToContentsMd(utilities);
 
   const grouped = groupBy(prop("group"), utilities);
 
@@ -173,7 +193,7 @@ const utilitiesToMd = async (
     )
     .join("\n\n");
 
-  return template + "\n\n" + utilitiesMd + "\n\n" + license;
+  return template + "\n\n" + contents + "\n\n" + utilitiesMd + "\n\n" + license;
 };
 
 // Splitting into targets
