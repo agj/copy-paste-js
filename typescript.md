@@ -33,6 +33,13 @@ const uniq = (list) => {
 };
 ```
 
+### zip
+
+```ts
+const zip = <L, R>(left: L[], right: R[]): [L, R][] =>
+  left.map((l, i) => [l, right[i]]);
+```
+
 ## Browser
 
 ### makeEl

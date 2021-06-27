@@ -33,6 +33,12 @@ const uniq = (list) => {
 };
 ```
 
+### zip
+
+```js
+const zip = (left, right) => left.map((l, i) => [l, right[i]]);
+```
+
 ## Browser
 
 ### makeEl
@@ -138,9 +144,7 @@ const counter = () => {
 const debounce = (secs, fn) => {
   const delay = secs * 1000;
   let timeoutID;
-
   const exec = (args) => fn.apply(null, args);
-
   return (...args) => {
     clearTimeout(timeoutID);
     timeoutID = setTimeout(exec, delay, args);
@@ -202,7 +206,6 @@ const throttle = (secs, fn) => {
   let last = 0;
   return (...args) => {
     const now = Date.now();
-
     if (now > last + waitTime) {
       last = now;
       fn(...args);

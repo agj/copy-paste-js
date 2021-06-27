@@ -51,6 +51,16 @@ var uniq = function uniq(list) {
 };
 ```
 
+### zip
+
+```js
+var zip = function zip(left, right) {
+  return left.map(function (l, i) {
+    return [l, right[i]];
+  });
+};
+```
+
 ## Browser
 
 ### makeEl
@@ -88,8 +98,8 @@ var onChanged = function onChanged(el, cb) {
 ### onLoad
 
 ```js
-var onLoad = function onLoad(cb) {
-  return /interactive|complete/.test(document.readyState)
+module.exports = function onLoad(cb) {
+  /interactive|complete/.test(document.readyState)
     ? setTimeout(cb, 0)
     : document.addEventListener("DOMContentLoaded", cb, {
         once: true,
@@ -170,11 +180,9 @@ var counter = function counter() {
 module.exports = function debounce(secs, fn) {
   var delay = secs * 1000;
   var timeoutID;
-
   var exec = function exec(args) {
     return fn.apply(null, args);
   };
-
   return function () {
     clearTimeout(timeoutID);
     timeoutID = setTimeout(exec, delay, arguments);
@@ -195,17 +203,10 @@ var delay = function delay(secs) {
 ### log
 
 ```js
-var log = function log() {
-  for (
-    var _len = arguments.length, msg = new Array(_len), _key = 0;
-    _key < _len;
-    _key++
-  ) {
-    msg[_key] = arguments[_key];
-  }
-
+module.exports = function log() {
+  var msg = [].slice.apply(arguments);
   return function (arg) {
-    console.log.apply(console, arg === undefined ? msg : [].concat(msg, [arg]));
+    console.log.apply(console, arg === undefined ? msg : msg.concat([arg]));
     return arg;
   };
 };
@@ -214,16 +215,9 @@ var log = function log() {
 ### partial
 
 ```js
-var partial = function partial(f, args1) {
+module.exports = function partial(f, args1) {
   return function () {
-    for (
-      var _len = arguments.length, args2 = new Array(_len), _key = 0;
-      _key < _len;
-      _key++
-    ) {
-      args2[_key] = arguments[_key];
-    }
-
+    var args2 = [].slice.apply(arguments);
     return f.apply(null, args1.concat(args2));
   };
 };
@@ -232,16 +226,9 @@ var partial = function partial(f, args1) {
 ### partialR
 
 ```js
-var partialR = function partialR(f, args1) {
+module.exports = function partialR(f, args1) {
   return function () {
-    for (
-      var _len = arguments.length, args2 = new Array(_len), _key = 0;
-      _key < _len;
-      _key++
-    ) {
-      args2[_key] = arguments[_key];
-    }
-
+    var args2 = [].slice.apply(arguments);
     return f.apply(null, args2.concat(args1));
   };
 };
@@ -250,15 +237,8 @@ var partialR = function partialR(f, args1) {
 ### pipe
 
 ```js
-var pipe = function pipe() {
-  for (
-    var _len = arguments.length, fs = new Array(_len), _key = 0;
-    _key < _len;
-    _key++
-  ) {
-    fs[_key] = arguments[_key];
-  }
-
+module.exports = function pipe() {
+  var fs = [].slice.apply(arguments);
   return fs.reduce(function (left, right) {
     return function () {
       return right(left.apply(void 0, arguments));
@@ -275,7 +255,6 @@ var throttle = function throttle(secs, fn) {
   var last = 0;
   return function () {
     var now = Date.now();
-
     if (now > last + waitTime) {
       last = now;
       fn.apply(void 0, arguments);

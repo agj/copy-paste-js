@@ -58,7 +58,10 @@ const postprocessTs = (name: string, code: string) =>
     parser: "babel-ts",
   });
 const postprocessJs = (code: string) =>
-  prettier.format(code.replace(/"use strict";(\n)+/, ""), { parser: "babel" });
+  prettier.format(
+    code.replace(/"use strict";(\n)+/, "").replace(/\n\n/g, "\n"),
+    { parser: "babel" }
+  );
 const postprocessMd = (md: string) =>
   prettier.format(md, { parser: "markdown" });
 const fence = "```";
