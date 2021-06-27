@@ -4,14 +4,14 @@ import { fcFilledArray } from "../../../test-utils";
 
 describe("zip", () => {
   test("returns an empty list when both arguments are empty lists", async () => {
-    expect(zip([], [])).toEqual([]);
+    expect(zip([])([])).toEqual([]);
   });
 
   testProp(
     "returns an array whose length is equal to left's",
     [fcFilledArray, fcFilledArray],
     (left, right) => {
-      const length = zip(left, right).length;
+      const length = zip(right)(left).length;
 
       expect(length).toBe(left.length);
     }
@@ -21,7 +21,7 @@ describe("zip", () => {
     "returns an array whose members are all 2-tuples",
     [fcFilledArray, fcFilledArray],
     (left, right) => {
-      const lengths = zip(left, right).map((r) => r.length);
+      const lengths = zip(right)(left).map((r) => r.length);
 
       expect(lengths).toEqual(Array(left.length).fill(2));
     }
@@ -31,7 +31,7 @@ describe("zip", () => {
     "returns an array whose first members equal left",
     [fcFilledArray, fcFilledArray],
     (left, right) => {
-      const firsts = zip(left, right).map(([l, _]) => l);
+      const firsts = zip(right)(left).map(([l, _]) => l);
 
       expect(firsts).toEqual(left);
     }
@@ -41,7 +41,7 @@ describe("zip", () => {
     "returns an array whose second members equal right truncated/padded to match left's length",
     [fcFilledArray, fcFilledArray],
     (left, right) => {
-      const seconds = zip(left, right).map(([_, r]) => r);
+      const seconds = zip(right)(left).map(([_, r]) => r);
 
       const rightProcessed = [...right];
       rightProcessed.length = left.length;

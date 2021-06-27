@@ -36,8 +36,10 @@ const uniq = (list) => {
 ### zip
 
 ```ts
-const zip = <L, R>(left: L[], right: R[]): [L, R][] =>
-  left.map((l, i) => [l, right[i]]);
+const zip =
+  <R>(right: R[]) =>
+  <L>(left: L[]): [L, R][] =>
+    left.map((l, i) => [l, right[i]]);
 ```
 
 ## Browser
@@ -307,13 +309,13 @@ const merge = (o1) => (o2) => {
 ### append
 
 ```ts
-const append = (a) => (b) => b + a;
+const append = (right) => (left) => left + right;
 ```
 
 ### prepend
 
 ```ts
-const prepend = (a) => (b) => a + b;
+const prepend = (left) => (right) => left + right;
 ```
 
 ### test

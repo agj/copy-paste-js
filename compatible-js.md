@@ -54,10 +54,12 @@ var uniq = function uniq(list) {
 ### zip
 
 ```js
-var zip = function zip(left, right) {
-  return left.map(function (l, i) {
-    return [l, right[i]];
-  });
+var zip = function zip(right) {
+  return function (left) {
+    return left.map(function (l, i) {
+      return [l, right[i]];
+    });
+  };
 };
 ```
 
@@ -391,9 +393,9 @@ var merge = function merge(o1) {
 ### append
 
 ```js
-var append = function append(a) {
-  return function (b) {
-    return b + a;
+var append = function append(right) {
+  return function (left) {
+    return left + right;
   };
 };
 ```
@@ -401,9 +403,9 @@ var append = function append(a) {
 ### prepend
 
 ```js
-var prepend = function prepend(a) {
-  return function (b) {
-    return a + b;
+var prepend = function prepend(left) {
+  return function (right) {
+    return left + right;
   };
 };
 ```
