@@ -7,7 +7,7 @@ These are utilities that adhere to the ECMAScript 5 standard, for compatibility 
 ### `every`
 
 ```js
-var every = function every(p) {
+var every = function (p) {
   return function (list) {
     return list.every(p);
   };
@@ -17,7 +17,7 @@ var every = function every(p) {
 ### `isIn`
 
 ```js
-var isIn = function isIn(list) {
+var isIn = function (list) {
   return function (obj) {
     return list.some(function (a) {
       return a === obj;
@@ -29,7 +29,7 @@ var isIn = function isIn(list) {
 ### `some`
 
 ```js
-var some = function some(p) {
+var some = function (p) {
   return function (list) {
     return list.some(p);
   };
@@ -39,7 +39,7 @@ var some = function some(p) {
 ### `uniq`
 
 ```js
-var uniq = function uniq(list) {
+var uniq = function (list) {
   var seen = [];
   return list.filter(function (item) {
     return seen.some(function (a) {
@@ -54,7 +54,7 @@ var uniq = function uniq(list) {
 ### `zip`
 
 ```js
-var zip = function zip(right) {
+var zip = function (right) {
   return function (left) {
     return left.map(function (l, i) {
       return [l, right[i]];
@@ -70,7 +70,7 @@ var zip = function zip(right) {
 Creates an element with the supplied tag name, attributes (defined in an object), and children. Can be used nested to create a tree.
 
 ```js
-module.exports = function makeEl(tag, attrs) {
+var makeEl = function (tag, attrs) {
   var el = document.createElement(tag);
   if (attrs)
     Object.keys(attrs).forEach(function (attr) {
@@ -89,7 +89,7 @@ module.exports = function makeEl(tag, attrs) {
 ### `onChanged`
 
 ```js
-var onChanged = function onChanged(el, cb) {
+var onChanged = function (el, cb) {
   var observer = new MutationObserver(cb);
   observer.observe(el, {
     childList: true,
@@ -104,7 +104,7 @@ var onChanged = function onChanged(el, cb) {
 Executes the supplied function as soon as the DOM is ready.
 
 ```js
-module.exports = function onLoad(cb) {
+var onLoad = function (cb) {
   /interactive|complete/.test(document.readyState)
     ? setTimeout(cb, 0)
     : document.addEventListener("DOMContentLoaded", cb, {
@@ -136,7 +136,7 @@ var selAll = document.querySelectorAll.bind(document);
 Alternately executes functions `f` and `g` upon each call.
 
 ```js
-var alternate = function alternate(f, g) {
+var alternate = function (f, g) {
   var state = false;
   return function () {
     state = !state;
@@ -150,7 +150,7 @@ var alternate = function alternate(f, g) {
 Returns a function that will take an array of arguments to call function `f` with.
 
 ```js
-var apply = function apply(f) {
+var apply = function (f) {
   return function (args) {
     return f.apply(void 0, args);
   };
@@ -162,7 +162,7 @@ var apply = function apply(f) {
 Returns a function that will call function `f` with any arguments supplied.
 
 ```js
-var call = function call(f) {
+var call = function (f) {
   return function () {
     return f.apply(void 0, arguments);
   };
@@ -174,7 +174,7 @@ var call = function call(f) {
 Takes a method name `method` and a list of arguments `args`, and returns a function that upon execution will take an object `obj` and call whatever method `method` in it with arguments `args`.
 
 ```js
-var callMethod = function callMethod(method, args) {
+var callMethod = function (method, args) {
   return function (obj) {
     return args ? obj[method].apply(obj, args) : obj[method]();
   };
@@ -186,7 +186,7 @@ var callMethod = function callMethod(method, args) {
 Returns a function that upon each execution will return a number that is 1 greater than the last time, starting with 0.
 
 ```js
-var counter = function counter() {
+var counter = function () {
   var i = 0;
   return function () {
     return i++;
@@ -199,10 +199,10 @@ var counter = function counter() {
 Takes a delay in seconds `secs` and a function `fn`, and returns a function that calls `fn` only after `secs` have passed without having been invoked. Useful, for instance, to make sure repeated changes executed in a small space of time don't cause too many expensive computations, and only when done perform a calculation.
 
 ```js
-module.exports = function debounce(secs, fn) {
+var debounce = function (secs, fn) {
   var delay = secs * 1000;
   var timeoutID;
-  var exec = function exec(args) {
+  var exec = function (args) {
     return fn.apply(null, args);
   };
   return function () {
@@ -217,7 +217,7 @@ module.exports = function debounce(secs, fn) {
 Takes a delay in seconds `secs`, and returns a function that takes any function `fn` and executes it only after `secs` have elapsed.
 
 ```js
-var delay = function delay(secs) {
+var delay = function (secs) {
   return function (fn) {
     return setTimeout(fn, secs * 1000);
   };
@@ -229,7 +229,7 @@ var delay = function delay(secs) {
 Takes a list of arguments `msg`, and returns a function that takes one argument `arg`, which it returns after logging `msg` and `arg` in the console.
 
 ```js
-module.exports = function log() {
+var log = function () {
   var msg = [].slice.apply(arguments);
   return function (arg) {
     console.log.apply(console, arg === undefined ? msg : msg.concat([arg]));
@@ -243,7 +243,7 @@ module.exports = function log() {
 Takes a function `f` and a list of arguments `args1`, and returns a function that will invoke `f` with `args1` plus any other arguments passed to it.
 
 ```js
-module.exports = function partial(f, args1) {
+var partial = function (f, args1) {
   return function () {
     var args2 = [].slice.apply(arguments);
     return f.apply(null, args1.concat(args2));
@@ -256,7 +256,7 @@ module.exports = function partial(f, args1) {
 Takes a function `f` and a list of arguments `args1`, and returns a function that will invoke `f` with any arguments passed to it plus `args1` to its right.
 
 ```js
-module.exports = function partialR(f, args1) {
+var partialR = function (f, args1) {
   return function () {
     var args2 = [].slice.apply(arguments);
     return f.apply(null, args2.concat(args1));
@@ -269,7 +269,7 @@ module.exports = function partialR(f, args1) {
 Takes any number of functions, and returns a function that will execute them from left to right, passing the return value of one as the input to the next.
 
 ```js
-module.exports = function pipe() {
+var pipe = function () {
   var fs = [].slice.apply(arguments);
   return fs.reduce(function (left, right) {
     return function () {
@@ -284,7 +284,7 @@ module.exports = function pipe() {
 Takes a delay `secs` and a function `fn`, and returns a function that will call `fn` once and ignore all subsequent calls until `secs` have elapsed.
 
 ```js
-var throttle = function throttle(secs, fn) {
+var throttle = function (secs, fn) {
   var waitTime = secs * 1000;
   var last = 0;
   return function () {
@@ -304,7 +304,7 @@ var throttle = function throttle(secs, fn) {
 Takes a function `f` and returns a function that returns the boolean opposite of the value that `f` would return for the same arguments.
 
 ```js
-var complement = function complement(f) {
+var complement = function (f) {
   return function () {
     return !f.apply(void 0, arguments);
   };
@@ -316,7 +316,7 @@ var complement = function complement(f) {
 Takes a value `a`, and returns a function that returns whether argument `b` is strictly equal to `a`.
 
 ```js
-var eq = function eq(a) {
+var eq = function (a) {
   return function (b) {
     return b === a;
   };
@@ -328,7 +328,7 @@ var eq = function eq(a) {
 Takes a value `a`, and returns a function that returns whether argument `b` is greater than `a`.
 
 ```js
-var gt = function gt(a) {
+var gt = function (a) {
   return function (b) {
     return b > a;
   };
@@ -340,7 +340,7 @@ var gt = function gt(a) {
 Takes a value `a`, and returns a function that returns whether argument `b` is greater than or equal to `a`.
 
 ```js
-var gte = function gte(a) {
+var gte = function (a) {
   return function (b) {
     return b >= a;
   };
@@ -352,7 +352,7 @@ var gte = function gte(a) {
 Takes a value `a`, and returns a function that returns whether argument `b` is less than `a`.
 
 ```js
-var lt = function lt(a) {
+var lt = function (a) {
   return function (b) {
     return b < a;
   };
@@ -364,7 +364,7 @@ var lt = function lt(a) {
 Takes a value `a`, and returns a function that returns whether argument `b` is less than or equal to `a`.
 
 ```js
-var lte = function lte(a) {
+var lte = function (a) {
   return function (b) {
     return b <= a;
   };
@@ -376,7 +376,7 @@ var lte = function lte(a) {
 Returns the boolean opposite of the argument passed.
 
 ```js
-var not = function not(a) {
+var not = function (a) {
   return !a;
 };
 ```
@@ -386,7 +386,7 @@ var not = function not(a) {
 If predicate function `pred` returns a **falsy** value when passed `a`, the return value will be `f(a)`, otherwise `a`.
 
 ```js
-var unless = function unless(pred) {
+var unless = function (pred) {
   return function (f) {
     return function (a) {
       return pred(a) ? a : f(a);
@@ -400,7 +400,7 @@ var unless = function unless(pred) {
 If predicate function `pred` returns a **truthy** value when passed `a`, the return value will be `f(a)`, otherwise `a`.
 
 ```js
-var when = function when(pred) {
+var when = function (pred) {
   return function (f) {
     return function (a) {
       return pred(a) ? f(a) : a;
@@ -414,7 +414,7 @@ var when = function when(pred) {
 ### `get`
 
 ```js
-var get = function get(prop) {
+var get = function (prop) {
   return function (obj) {
     return obj[prop];
   };
@@ -424,7 +424,7 @@ var get = function get(prop) {
 ### `merge`
 
 ```js
-var merge = function merge(o1) {
+var merge = function (o1) {
   return function (o2) {
     var r = {};
     Object.keys(o1).forEach(function (prop) {
@@ -443,7 +443,7 @@ var merge = function merge(o1) {
 ### `append`
 
 ```js
-var append = function append(right) {
+var append = function (right) {
   return function (left) {
     return left + right;
   };
@@ -453,7 +453,7 @@ var append = function append(right) {
 ### `prepend`
 
 ```js
-var prepend = function prepend(left) {
+var prepend = function (left) {
   return function (right) {
     return left + right;
   };
@@ -463,7 +463,7 @@ var prepend = function prepend(left) {
 ### `test`
 
 ```js
-var test = function test(regex) {
+var test = function (regex) {
   return function (text) {
     return regex.test(text);
   };

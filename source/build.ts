@@ -4,12 +4,13 @@ import babel from "@babel/core";
 import prettier from "prettier";
 import { groupBy, prop, map } from "ramda";
 
-// Config
+// Transpilation configuration
 
 const babelConfigModern = {
   filename: "index.ts",
   presets: ["@babel/preset-typescript", "modern-browsers"],
 } as any;
+
 const babelConfigCompatible = {
   filename: "index.ts",
   presets: ["@babel/preset-typescript", "@babel/preset-env"],
@@ -50,7 +51,7 @@ type CodeFormat = "js" | "ts";
 
 type TemplateName = "compatible-js" | "modern-js" | "typescript";
 
-// Utility functions
+// Utils
 
 const pathRegex = /utilities\/([^/]+)\/([^/]+)\//;
 const getGroup = (path: string) => path.match(pathRegex)?.[1] ?? "";
@@ -58,6 +59,8 @@ const getName = (path: string) => path.match(pathRegex)?.[2] ?? "";
 const getUtilityPath = (name: string, group: string) =>
   `./utilities/${group}/${name}/`;
 const fence = "```";
+
+// Data retrieval utils
 
 const getUtilityFile = async (
   fileName: string,
@@ -74,28 +77,40 @@ const getUtilityFile = async (
     return null;
   }
 };
+
 const getTypescript = (name: string, group: string) =>
   getUtilityFile("index.ts", name, group);
+
 const getCompatible = (name: string, group: string) =>
   getUtilityFile("compatible.js", name, group);
+
 const getReadme = (name: string, group: string) =>
   getUtilityFile("readme.md", name, group);
+
 const getTemplate = (name: TemplateName | "license") =>
   fs.readFile(`./templates/${name}.md`, "utf-8");
+
+// Data postprocessing utils
 
 const postprocessTs = (name: string, code: string) =>
   prettier.format(code.replace("export default ", `const ${name} = `), {
     parser: "babel-ts",
   });
+
 const postprocessJs = (code: string) =>
   prettier.format(
-    code.replace(/"use strict";(\n)+/, "").replace(/\n\n/g, "\n"),
+    code
+      .replace(/"use strict";(\n)+/, "")
+      .replace(/\n\n/g, "\n")
+      .replace(/var (\w+) = function (\w+)\(/, "var $1 = function (")
+      .replace(/module\.exports = function (\w+)\(/g, "var $1 = function ("),
     { parser: "babel" }
   );
+
 const postprocessMd = (md: string) =>
   prettier.format(md, { parser: "markdown" });
 
-// Get utilities
+// Retrieving the utilities
 
 const utilityPaths = await glob(`./utilities/*/*/`);
 
