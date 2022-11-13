@@ -167,9 +167,12 @@ const selAll = document.querySelectorAll.bind(document);
 Alternately executes functions `f` and `g` upon each call.
 
 ```ts
-const alternate = (f, g) => {
+const alternate = <Args extends unknown[], Rf, Rg>(
+  f: (...args: Args) => Rf,
+  g: (...args: Args) => Rg
+) => {
   let state = false;
-  return (...args) => {
+  return (...args: Args): Rf | Rg => {
     state = !state;
     return state ? f(...args) : g(...args);
   };
@@ -181,7 +184,10 @@ const alternate = (f, g) => {
 Returns a function that will take an array of arguments to call function `f` with.
 
 ```ts
-const apply = (f) => (args) => f(...args);
+const apply =
+  <Args extends unknown[]>(f: (...args: Args) => unknown) =>
+  (args: Args) =>
+    f(...args);
 ```
 
 ### `call`
@@ -190,8 +196,8 @@ Returns a function that will call function `f` with any arguments supplied.
 
 ```ts
 const call =
-  (f) =>
-  (...args) =>
+  <Args extends unknown[], R>(f: (...args: Args) => R) =>
+  (...args: Args): R =>
     f(...args);
 ```
 
@@ -416,19 +422,19 @@ const merge = (o1) => (o2) => {
 ### `append`
 
 ```ts
-const append = (right) => (left) => left + right;
+const append = (right: string) => (left: string) => left + right;
 ```
 
 ### `prepend`
 
 ```ts
-const prepend = (left) => (right) => left + right;
+const prepend = (left: string) => (right: string) => left + right;
 ```
 
 ### `test`
 
 ```ts
-const test = (regex) => (text) => regex.test(text);
+const test = (regex: RegExp) => (text: string) => regex.test(text);
 ```
 
 ## Public domain license
