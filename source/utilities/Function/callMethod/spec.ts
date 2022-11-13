@@ -1,6 +1,6 @@
 import callMethod from "./";
 
-import { testProp, fc } from "jest-fast-check";
+import { testProp, fc } from "@fast-check/jest";
 import { fcFilledArray } from "../../../test-utils";
 
 describe("callMethod", () => {

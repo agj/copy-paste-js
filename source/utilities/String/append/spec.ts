@@ -1,6 +1,6 @@
 import append from "./";
 
-import { testProp, fc } from "jest-fast-check";
+import { testProp, fc } from "@fast-check/jest";
 
 describe("append", () => {
   testProp(

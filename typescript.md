@@ -13,6 +13,7 @@ These are TypeScript utilities apt for transpilation into JavaScript. [For other
 - [Browser](#browser)
   - [makeEl](#makeel)
   - [onChanged](#onchanged)
+  - [onFullLoad](#onfullload)
   - [onLoad](#onload)
   - [sel](#sel)
   - [selAll](#selall)
@@ -119,6 +120,17 @@ const onChanged = (el: HTMLElement, cb: MutationCallback): (() => void) => {
   observer.observe(el, { childList: true, subtree: true });
   return observer.disconnect.bind(observer);
 };
+```
+
+### `onFullLoad`
+
+Executes the supplied function as soon as the page is fully loaded.
+
+```ts
+const onFullLoad = (cb: () => any) =>
+  /complete/.test(document.readyState)
+    ? setTimeout(cb, 0)
+    : window.addEventListener("load", cb, { once: true });
 ```
 
 ### `onLoad`

@@ -1,4 +1,4 @@
-import { fc } from "jest-fast-check";
+import { fc } from "@fast-check/jest";
 
 export const nextTick = async () => {
   jest.useRealTimers();

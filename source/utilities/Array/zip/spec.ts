@@ -1,5 +1,5 @@
 import zip from "./";
-import { fc, testProp } from "jest-fast-check";
+import { fc, testProp } from "@fast-check/jest";
 import { fcFilledArray } from "../../../test-utils";
 
 describe("zip", () => {
