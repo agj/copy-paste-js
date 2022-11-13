@@ -4,10 +4,10 @@ describe("alternate", () => {
   test("test", async () => {
     expect.assertions(4);
     var f = alternate(
-      function (n) {
+      function (n: number) {
         expect(n === 0 || n === 2).toBe(true);
       },
-      function (n) {
+      function (n: number) {
         expect(n === 1 || n === 3).toBe(true);
       }
     );

@@ -1,1 +1,1 @@
-export default (regex) => (text) => regex.test(text);
+export default (regex: RegExp) => (text: string) => regex.test(text);

@@ -1,1 +1,1 @@
-export default (left) => (right) => left + right;
+export default (left: string) => (right: string) => left + right;
