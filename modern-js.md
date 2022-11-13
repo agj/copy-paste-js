@@ -13,6 +13,7 @@ These are utilities that adhere to the ECMAScript 2015 standard, to use in relat
 - [Browser](#browser)
   - [makeEl](#makeel)
   - [onChanged](#onchanged)
+  - [onFullLoad](#onfullload)
   - [onLoad](#onload)
   - [sel](#sel)
   - [selAll](#selall)
@@ -115,6 +116,19 @@ const onChanged = (el, cb) => {
   });
   return observer.disconnect.bind(observer);
 };
+```
+
+### `onFullLoad`
+
+Executes the supplied function as soon as the page is fully loaded.
+
+```js
+const onFullLoad = (cb) =>
+  /complete/.test(document.readyState)
+    ? setTimeout(cb, 0)
+    : window.addEventListener("load", cb, {
+        once: true,
+      });
 ```
 
 ### `onLoad`
