@@ -151,7 +151,7 @@ Executes the supplied function as soon as the page is fully loaded.
 
 ```js
 var onFullLoad = function (cb) {
-  return /complete/.test(document.readyState)
+  /complete/.test(document.readyState)
     ? setTimeout(cb, 0)
     : window.addEventListener("load", cb, {
         once: true,

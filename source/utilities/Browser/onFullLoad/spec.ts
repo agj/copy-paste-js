@@ -1,4 +1,5 @@
 import onFullLoad from "./";
+import onFullLoadEs5 from "./compatible";
 
 const testWith = (onFullLoad) => async () => {
   expect.assertions(3);
@@ -18,4 +19,5 @@ const testWith = (onFullLoad) => async () => {
 
 describe("onFullLoad", () => {
   test("typescript", testWith(onFullLoad));
+  test("compatible", testWith(onFullLoadEs5));
 });
