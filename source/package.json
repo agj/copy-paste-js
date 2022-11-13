@@ -3,8 +3,8 @@
   "type": "module",
   "scripts": {
     "build": "node --loader ts-node/esm ./build.ts",
-    "test": "jest",
-    "test:watch": "jest --watch"
+    "test": "jest --show-seed",
+    "test:watch": "jest --show-seed --watch"
   },
   "dependencies": {
     "@babel/core": "^7.20.2",
