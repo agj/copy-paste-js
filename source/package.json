@@ -1,11 +1,6 @@
 {
   "private": true,
   "type": "module",
-  "scripts": {
-    "build": "node --loader ts-node/esm ./build.ts",
-    "test": "jest --show-seed",
-    "test:watch": "jest --show-seed --watch"
-  },
   "dependencies": {
     "@babel/core": "^7.24.3",
     "@babel/preset-env": "^7.24.3",
