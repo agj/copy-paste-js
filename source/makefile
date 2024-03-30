@@ -2,14 +2,17 @@ init: ## Load a shell with all dependencies (if you don't use direnv).
 	@echo "You may type 'exit' to return to the regular shell.\n"
 	nix develop -c "$$SHELL"
 
-build: ## Build the markdown files.
-	node --loader ts-node/esm ./build.ts
+build: install ## Build the markdown files.
+	ts-node ./build.ts
 
-test: ## Run tests.
+test: install ## Run tests.
 	npx jest --show-seed
 
-test-watch: ## Run tests and watch for changes.
+test-watch: install ## Run tests and watch for changes.
 	npx jest --show-seed --watch
+
+install:
+	pnpm install
 
 
 
