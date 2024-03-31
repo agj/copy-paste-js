@@ -74,7 +74,7 @@ const some = (p) => (list) => list.some(p);
 const uniq = (list) => {
   const seen = [];
   return list.filter((item) =>
-    seen.some((a) => a === item) ? false : (seen.push(item), true)
+    seen.some((a) => a === item) ? false : (seen.push(item), true),
   );
 };
 ```
@@ -105,7 +105,7 @@ const makeEl = (
     Object.keys(attrs).forEach((attr) => el.setAttribute(attr, attrs[attr]));
   children
     .map((obj) =>
-      typeof obj === "string" ? document.createTextNode(obj) : obj
+      typeof obj === "string" ? document.createTextNode(obj) : obj,
     )
     .forEach((node) => el.appendChild(node));
   return el;
@@ -115,7 +115,7 @@ const makeEl = (
 ### `onChanged`
 
 ```ts
-const onChanged = (el: HTMLElement, cb: MutationCallback): (() => void) => {
+const onChanged = (el: Element, cb: MutationCallback): (() => void) => {
   const observer = new MutationObserver(cb);
   observer.observe(el, { childList: true, subtree: true });
   return observer.disconnect.bind(observer);
@@ -169,7 +169,7 @@ Alternately executes functions `f` and `g` upon each call.
 ```ts
 const alternate = <Args extends unknown[], Rf, Rg>(
   f: (...args: Args) => Rf,
-  g: (...args: Args) => Rg
+  g: (...args: Args) => Rg,
 ) => {
   let state = false;
   return (...args: Args): Rf | Rg => {
@@ -211,10 +211,10 @@ const callMethod =
     Key extends string | number | symbol,
     Arg,
     Res,
-    Obj extends Record<Key, (...args: Array<Arg>) => Res>
+    Obj extends Record<Key, (...args: Array<Arg>) => Res>,
   >(
     method: Key,
-    args?: Array<Arg>
+    args?: Array<Arg>,
   ) =>
   (obj: Obj): Res =>
     args ? obj[method](...args) : obj[method]();
@@ -299,7 +299,7 @@ const pipe = (...fs) =>
   fs.reduce(
     (left, right) =>
       (...args) =>
-        right(left(...args))
+        right(left(...args)),
   );
 ```
 
@@ -387,7 +387,7 @@ const not = (a) => !a;
 If predicate function `pred` returns a **falsy** value when passed `a`, the return value will be `f(a)`, otherwise `a`.
 
 ```ts
-const unless = (pred) => (f) => (a) => pred(a) ? a : f(a);
+const unless = (pred) => (f) => (a) => (pred(a) ? a : f(a));
 ```
 
 ### `when`
@@ -395,7 +395,7 @@ const unless = (pred) => (f) => (a) => pred(a) ? a : f(a);
 If predicate function `pred` returns a **truthy** value when passed `a`, the return value will be `f(a)`, otherwise `a`.
 
 ```ts
-const when = (pred) => (f) => (a) => pred(a) ? f(a) : a;
+const when = (pred) => (f) => (a) => (pred(a) ? f(a) : a);
 ```
 
 ## Object

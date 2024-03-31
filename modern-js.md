@@ -74,7 +74,7 @@ const some = (p) => (list) => list.some(p);
 const uniq = (list) => {
   const seen = [];
   return list.filter((item) =>
-    seen.some((a) => a === item) ? false : (seen.push(item), true)
+    seen.some((a) => a === item) ? false : (seen.push(item), true),
   );
 };
 ```
@@ -98,7 +98,7 @@ const makeEl = (tag, attrs, ...children) => {
     Object.keys(attrs).forEach((attr) => el.setAttribute(attr, attrs[attr]));
   children
     .map((obj) =>
-      typeof obj === "string" ? document.createTextNode(obj) : obj
+      typeof obj === "string" ? document.createTextNode(obj) : obj,
     )
     .forEach((node) => el.appendChild(node));
   return el;
@@ -283,7 +283,7 @@ const pipe = (...fs) =>
   fs.reduce(
     (left, right) =>
       (...args) =>
-        right(left(...args))
+        right(left(...args)),
   );
 ```
 
@@ -371,7 +371,7 @@ const not = (a) => !a;
 If predicate function `pred` returns a **falsy** value when passed `a`, the return value will be `f(a)`, otherwise `a`.
 
 ```js
-const unless = (pred) => (f) => (a) => pred(a) ? a : f(a);
+const unless = (pred) => (f) => (a) => (pred(a) ? a : f(a));
 ```
 
 ### `when`
@@ -379,7 +379,7 @@ const unless = (pred) => (f) => (a) => pred(a) ? a : f(a);
 If predicate function `pred` returns a **truthy** value when passed `a`, the return value will be `f(a)`, otherwise `a`.
 
 ```js
-const when = (pred) => (f) => (a) => pred(a) ? f(a) : a;
+const when = (pred) => (f) => (a) => (pred(a) ? f(a) : a);
 ```
 
 ## Object

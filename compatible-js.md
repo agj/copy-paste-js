@@ -125,7 +125,7 @@ var makeEl = function (tag, attrs) {
   for (var i = 2, len = arguments.length, child; i < len; i++) {
     child = arguments[i];
     el.appendChild(
-      typeof child === "string" ? document.createTextNode(child) : child
+      typeof child === "string" ? document.createTextNode(child) : child,
     );
   }
   return el;
