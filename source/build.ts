@@ -114,16 +114,16 @@ const postprocessMd = (md: string) =>
 
 const utilityPaths = await glob(`./utilities/*/*/`);
 
-const allUtilities: Array<Utility> = await Promise.all(
-  utilityPaths.map(async (path) => {
+const allUtilities = await Promise.all(
+  utilityPaths.map(async (path): Promise<Utility> => {
     const name = getName(path);
     const group = getGroup(path);
 
-    const tsCode = postprocessTs(name, await getTypescript(name, group));
-    const jsCodeModern = postprocessJs(
+    const tsCode = await postprocessTs(name, await getTypescript(name, group));
+    const jsCodeModern = await postprocessJs(
       babel.transformSync(tsCode, babelConfigModern).code
     );
-    const jsCodeCompatible = postprocessJs(
+    const jsCodeCompatible = await postprocessJs(
       (await getCompatible(name, group)) ??
         babel.transformSync(tsCode, babelConfigCompatible).code
     );
@@ -225,7 +225,7 @@ const builds: Array<[CodeFormat, TemplateName, Array<UtilitySingleTarget>]> = [
 ];
 
 builds.forEach(async ([codeFormat, templateName, utilities]) => {
-  const md = postprocessMd(
+  const md = await postprocessMd(
     await utilitiesToMd(codeFormat, templateName, utilities)
   );
   fs.writeFile(`../${templateName}.md`, md, "utf-8");
