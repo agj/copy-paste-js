@@ -2,7 +2,7 @@ import glob from "glob-promise";
 import fs from "fs/promises";
 import babel from "@babel/core";
 import prettier from "prettier";
-import { groupBy, prop, map } from "ramda";
+import { groupBy, prop } from "ramda";
 
 // Transpilation configuration
 
